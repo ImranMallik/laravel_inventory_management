@@ -1,7 +1,36 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__ . '/auth.php';
+
+
+// *** custom Auth Controller ***//
+Route::get('/login', [AuthController::class, 'login'])->name('admin.login');
+Route::post('/login', [AuthController::class, 'loginStore'])->name('admin.login-store');
+Route::get('/register', [AuthController::class, 'register'])->name('admin.register');
+
+Route::get('/logout', [AuthController::class, 'logoutView'])->name('admin.logout-view');
+Route::post('/logout', [AuthController::class, 'logout'])->name('admin.logout');
+
+// *** Admin Dashboard ***//
+Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
 });
