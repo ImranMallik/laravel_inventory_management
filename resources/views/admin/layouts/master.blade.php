@@ -16,6 +16,9 @@
     <!-- App css -->
     <link href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css" id="app-style" />
 
+    {{-- Toastr --}}
+    <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css') }}">
+
     <!-- Icons -->
     <link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
 
@@ -72,6 +75,36 @@
 
     <!-- App js-->
     <script src="{{ asset('assets/js/app.js') }}"></script>
+
+    <script src="{{ asset('assets/js/toastr.min.js') }}"></script>
+
+    <script>
+        toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut",
+            "showDuration": "500",
+            "hideDuration": "500",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "positionClass": "toast-top-right",
+            "easing": "swing",
+            "showEasing": "swing",
+            "hideEasing": "linear"
+        };
+
+        @if ($errors->any())
+            @foreach ($errors->all() as $error)
+                toastr.error("{{ $error }}");
+            @endforeach
+        @endif
+        @if (session('success'))
+            toastr.success("{{ session('success') }}");
+        @endif
+    </script>
+
+    @stack('scripts')
 
 </body>
 

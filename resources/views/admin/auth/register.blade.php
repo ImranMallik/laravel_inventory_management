@@ -39,23 +39,34 @@
                                 </div>
 
                                 <div class="pt-0">
-                                    <form action="index.html" class="my-4">
+                                    <form method="POST" action="{{ route('admin.register-store') }}" class="my-4">
+                                        @csrf
                                         <div class="form-group mb-3">
-                                            <label for="username" class="form-label">Username</label>
-                                            <input class="form-control" name="username" type="text" id="username"
-                                                required="" placeholder="Enter your Username">
+                                            <label for="name" class="form-label">Username</label>
+                                            <input class="form-control" value="{{ old('name') }}" name="name"
+                                                type="text" id="name" required=""
+                                                placeholder="Enter your Username">
                                         </div>
 
                                         <div class="form-group mb-3">
-                                            <label for="emailaddress" class="form-label">Email address</label>
-                                            <input class="form-control" type="email" id="emailaddress" required=""
+                                            <label for="email" class="form-label">Email address</label>
+                                            <input class="form-control" name="email" value="{{ old('email') }}"
+                                                type="email" id="email" required=""
                                                 placeholder="Enter your email">
+
                                         </div>
 
                                         <div class="form-group mb-3">
                                             <label for="password" class="form-label">Password</label>
-                                            <input class="form-control" type="password" required="" id="password"
-                                                placeholder="Enter your password">
+                                            <input class="form-control" type="password" name="password" required=""
+                                                id="password" placeholder="Enter your password">
+                                        </div>
+                                        <div class="form-group mb-3">
+                                            <label for="password_confirmation" class="form-label">Confirm
+                                                Password</label>
+                                            <input class="form-control" type="password" name="password_confirmation"
+                                                required="" id="password_confirmation"
+                                                placeholder="Enter your confirm password">
                                         </div>
 
                                         <div class="form-group d-flex mb-3">
