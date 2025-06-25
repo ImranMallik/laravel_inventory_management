@@ -98,28 +98,18 @@
 
                                          {{-- === Email & Password Form === --}}
                                          <div class="col-lg-6 col-xl-6">
-                                             <form action="#" method="POST">
+                                             <form method="POST" id="userCredentials">
                                                  @csrf
-                                                 @method('PUT')
-
                                                  <div class="card border mb-0">
                                                      <div class="card-header">
                                                          <div class="row align-items-center">
                                                              <div class="col">
-                                                                 <h4 class="card-title mb-0">Change Email & Password</h4>
+                                                                 <h4 class="card-title mb-0">Password</h4>
                                                              </div>
                                                          </div>
                                                      </div>
 
                                                      <div class="card-body mb-0">
-                                                         <div class="form-group mb-3 row">
-                                                             <label class="form-label">Email</label>
-                                                             <div class="col-12">
-                                                                 <input class="form-control" name="email" type="email"
-                                                                     value="{{ old('email', $user->email) }}">
-                                                             </div>
-                                                         </div>
-
                                                          <div class="form-group mb-3 row">
                                                              <label class="form-label">Old Password</label>
                                                              <div class="col-12">
@@ -147,8 +137,14 @@
 
                                                          <div class="form-group row">
                                                              <div class="col-12">
-                                                                 <button type="submit" class="btn btn-primary">Update
-                                                                     Email & Password</button>
+                                                                 <button type="submit" class="btn btn-primary"
+                                                                     id="submitUserBtn">Update Password</button>
+                                                                 <button class="btn btn-primary d-none" type="button"
+                                                                     id="loadingUserBtn" disabled>
+                                                                     <span class="spinner-border spinner-border-sm"
+                                                                         role="status" aria-hidden="true"></span>
+                                                                     Updating...
+                                                                 </button>
                                                                  <button type="reset"
                                                                      class="btn btn-danger">Cancel</button>
                                                              </div>
@@ -225,6 +221,50 @@
                      }
                  });
              });
+
+             //  Update User credentials 
+
+             $("#userCredentials").on('submit', function(e) {
+                 e.preventDefault();
+                 let form = $(this)[0];
+                 let formData = new FormData(form);
+                 $('#submitUserBtn').addClass('d-none');
+                 $('#loadingUserBtn').removeClass('d-none');
+
+                 let routeTemplate = "{{ route('admin.profile.credential.update', ':id') }}";
+                 let userId = {{ auth()->user()->id }};
+                 let url = routeTemplate.replace(':id', userId);
+
+                 $.ajax({
+
+                     url: url,
+                     method: 'POST',
+                     data: formData,
+                     contentType: false,
+                     processData: false,
+
+                     success: function(response) {
+                         if (response.status === true) {
+                             toastr.success(response.message);
+                             setTimeout(() => {
+                                 window.location.reload();
+                             }, 1500);
+                         } else {
+                             toastr.error(response.message);
+                         }
+                     },
+                     error: function(xhr, status, error) {
+                         let errorMessage = xhr.responseJSON.message;
+                         toastr.error(errorMessage);
+                     },
+                     complete: function() {
+
+                         $('#submitUserBtn').removeClass('d-none');
+                         $('#loadingUserBtn').addClass('d-none');
+                     }
+                 });
+             });
+
 
          });
      </script>

@@ -7,14 +7,7 @@
                            <i data-feather="menu" class="noti-icon"></i>
                        </button>
                    </li>
-                   <li class="d-none d-lg-block">
-                       <div class="position-relative topbar-search">
-                           <input type="text" class="form-control bg-light bg-opacity-75 border-light ps-4"
-                               placeholder="Search...">
-                           <i
-                               class="mdi mdi-magnify fs-16 position-absolute text-muted top-50 translate-middle-y ms-2"></i>
-                       </div>
-                   </li>
+
                </ul>
 
                <ul class="list-unstyled topnav-menu mb-0 d-flex align-items-center">
@@ -139,8 +132,7 @@
                                </a>
 
                                <!-- item-->
-                               <a href="javascript:void(0);"
-                                   class="dropdown-item notify-item text-muted link-primary">
+                               <a href="javascript:void(0);" class="dropdown-item notify-item text-muted link-primary">
                                    <div class="notify-icon">
                                        <img src="assets/images/users/user-6.jpg" class="img-fluid rounded-circle"
                                            alt="" />
@@ -170,9 +162,9 @@
                    <li class="dropdown notification-list topbar-dropdown">
                        <a class="nav-link dropdown-toggle nav-user me-0" data-bs-toggle="dropdown" href="#"
                            role="button" aria-haspopup="false" aria-expanded="false">
-                           <img src="assets/images/users/user-11.jpg" alt="user-image" class="rounded-circle">
+                           <img src="{{ asset(auth()->user()->photo) }}" alt="user-image" class="rounded-circle">
                            <span class="pro-user-name ms-1">
-                               Christian <i class="mdi mdi-chevron-down"></i>
+                               {{ auth()->user()->name }} <i class="mdi mdi-chevron-down"></i>
                            </span>
                        </a>
                        <div class="dropdown-menu dropdown-menu-end profile-dropdown ">

@@ -38,4 +38,5 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
     // Profile Route
     Route::get('/profile', [AdminProfileController::class, 'index'])->name('profile');
     Route::post('/profile/{id}', [AdminProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/credential/{id}', [AdminProfileController::class, 'updateCredential'])->name('profile.credential.update');
 });
