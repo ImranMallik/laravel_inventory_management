@@ -67,6 +67,23 @@
                         </ul>
                     </div>
                 </li>
+                <li>
+                    <a href="#supplierManage" data-bs-toggle="collapse">
+                        <i data-feather="box"></i>
+
+
+                        <span> Manage Supplier </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="supplierManage">
+                        <ul class="nav-second-level">
+                            <li>
+                                <a href="{{ route('admin.supplier.all') }}" class="tp-link">All Supplier</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
 
                 <li>
                     <a href="#sidebarError" data-bs-toggle="collapse">
