@@ -4,6 +4,7 @@
 <head>
 
     <meta charset="utf-8" />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>Admin || Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc." />
@@ -12,6 +13,17 @@
 
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
+    <!-- Datatables css -->
+    <link href="{{ asset('assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet"
+        type="text/css" />
+    <link href="{{ asset('assets/libs/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css') }}" rel="stylesheet"
+        type="text/css" />
+    <link href="{{ asset('assets/libs/datatables.net-keytable-bs5/css/keyTable.bootstrap5.min.css') }}" rel="stylesheet"
+        type="text/css" />
+    <link href="{{ asset('assets/libs/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css') }}"
+        rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/libs/datatables.net-select-bs5/css/select.bootstrap5.min.css') }}" rel="stylesheet"
+        type="text/css" />
 
     <!-- App css -->
     <link href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css" id="app-style" />
@@ -76,7 +88,105 @@
     <!-- App js-->
     <script src="{{ asset('assets/js/app.js') }}"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <!-- Datatables js -->
+    <script src="{{ asset('assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+
+    <!-- dataTables.bootstrap5 -->
+    <script src="{{ asset('assets/libs/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js') }}"></script>
+
+    <!-- Datatable Demo App Js -->
+    <script src="{{ asset('assets/js/pages/datatable.init.js') }}"></script>
+
     <script src="{{ asset('assets/js/toastr.min.js') }}"></script>
+    {{-- Ajax Delete --}}
+    <script>
+        $(document).ready(function() {
+            $('body').on('click', '.delete-item', function(event) {
+                event.preventDefault();
+                let deleteUrl = $(this).attr('href');
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#28a745",
+                    cancelButtonColor: "#dc3545",
+                    confirmButtonText: "Yes, delete it!",
+                    cancelButtonText: "Cancel"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajaxSetup({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            }
+                        });
+                        $.ajax({
+                            type: 'DELETE',
+                            url: deleteUrl,
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+
+                            success: function(data) {
+                                if (data.status === 'success') {
+                                    Swal.fire(
+                                        'Deleted!',
+                                        data.message,
+                                        'success'
+                                    ).then(() => {
+                                        window.location.reload();
+                                        // $('table').DataTable().ajax.reload(null,
+                                        //     false);
+                                    });
+
+                                } else if (data.status === 'error') {
+                                    Swal.fire(
+                                        "Can't Delete",
+                                        data.message,
+                                        'error'
+                                    )
+                                }
+
+
+
+                            },
+                            error: function(xhr, status, error) {
+                                console.log(xhr.responseText); // For debugging
+
+                                // Use fallback-friendly logic without try-catch
+                                let message = 'An unexpected error occurred.';
+
+                                if (xhr.responseJSON && xhr.responseJSON.message) {
+                                    message = xhr.responseJSON.message;
+                                } else if (xhr.responseText !== '') {
+                                    // Only if JSON.parse might fail, skip parsing
+                                    const isJson = xhr.getResponseHeader('Content-Type')
+                                        ?.includes('application/json');
+                                    if (isJson) {
+                                        const response = JSON.parse(xhr.responseText);
+                                        message = response.message || message;
+                                    } else {
+                                        message = error || message;
+                                    }
+                                }
+
+                                Swal.fire(
+                                    "Can't Delete",
+                                    message,
+                                    'error'
+                                );
+                            }
+                        });
+
+                    }
+                });
+            })
+        })
+    </script>
 
     <script>
         toastr.options = {

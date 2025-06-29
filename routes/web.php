@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -39,4 +40,14 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
     Route::get('/profile', [AdminProfileController::class, 'index'])->name('profile');
     Route::post('/profile/{id}', [AdminProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/credential/{id}', [AdminProfileController::class, 'updateCredential'])->name('profile.credential.update');
+    //**** Manage Brand ***//
+    Route::controller(BrandController::class)->group(function () {
+        Route::get('/brand-list', 'index')->name('brand.all');
+        Route::get('/brand-create', 'create')->name('brand.create');
+        Route::post('/brand-store', 'store')->name('brand.store');
+        Route::get('/brand-edit/{id}', 'edit')->name('brand.edit');
+        Route::post('/brand-update/{id}', 'update')->name('brand.update');
+        Route::delete('/brand-delete/{id}', 'delete')->name('brand.delete');
+    });
+    // ***  ***//
 });
