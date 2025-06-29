@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
+use App\Http\Controllers\Admin\WareHouseController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -49,5 +50,10 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
         Route::post('/brand-update/{id}', 'update')->name('brand.update');
         Route::delete('/brand-delete/{id}', 'delete')->name('brand.delete');
     });
-    // ***  ***//
+    // *** Ware House  ***//
+
+    Route::controller(WareHouseController::class)->group(function () {
+        Route::get('/ware-house-list', 'index')->name('ware-house.all');
+        Route::get('/ware-house-create', 'create')->name('ware-house.create');
+    });
 });
