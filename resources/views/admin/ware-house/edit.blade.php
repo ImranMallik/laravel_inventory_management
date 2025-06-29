@@ -21,24 +21,25 @@
                          </div><!-- end card header -->
 
                          <div class="card-body">
-                             <form id="warehouse" method="post" class="row g-3">
+                             <form id="editWareHouse" method="post" class="row g-3">
                                  @csrf
+                                 <input type="hidden" name="id" value="{{$warehouses->id}}">
 
                                  <div class="col-md-6">
                                      <label for="validationDefault01" class="form-label">Warehouse Name :</label>
-                                     <input type="text" class="form-control" name="name">
+                                     <input type="text" class="form-control" name="name" value="{{$warehouses->name}}">
                                  </div>
                                  <div class="col-md-6">
                                      <label for="validationDefault02" class="form-label">Warehouse Email :</label>
-                                     <input type="text" class="form-control" name="email">
+                                     <input type="text" class="form-control" name="email" value="{{$warehouses->email}}">
                                  </div>
                                  <div class="col-md-6">
                                      <label for="validationDefault02" class="form-label">Warehouse Phone :</label>
-                                     <input type="text" class="form-control" name="phone">
+                                     <input type="text" class="form-control" name="phone" value="{{$warehouses->phone}}">
                                  </div>
                                  <div class="col-md-6">
                                      <label for="validationDefault02" class="form-label">Warehouse City :</label>
-                                     <input type="text" class="form-control" name="city">
+                                     <input type="text" class="form-control" name="city" value="{{$warehouses->city}}">
                                  </div>
 
                                  <div class="col-12">
@@ -68,13 +69,14 @@
      <script>
          $(document).ready(function() {
 
-             $('#warehouse').on('submit', function(e) {
+             $('#editWareHouse').on('submit', function(e) {
                  e.preventDefault();
                  //  alert();
                  let name = $('input[name="name"]').val();
                  let email = $('input[name="email"]').val();
                  let phone = $('input[name="phone"]').val();
                  let city = $('input[name="city"]').val();
+                 let id = $('input[name="id"]').val();
 
                  if (!name || !email || !phone || !city) {
                      toastr.error("Please fill in all required fields.");
@@ -85,7 +87,7 @@
                  $('#saveButton').attr('disabled', true);
                  let formData = new FormData(this);
                  $.ajax({
-                     url: "{{ route('admin.ware-house.store') }}",
+                    url: "{{ route('admin.ware-house.update', ':id') }}".replace(':id', id),
                      method: "POST",
                      data: formData,
                      processData: false,
@@ -93,7 +95,7 @@
                      success: function(response) {
                          toastr.success(response.message);
 
-                         $('#warehouse')[0].reset();
+                         $('#editWareHouse')[0].reset();
                          setTimeout(() => {
                              window.location.href = "{{ route('admin.ware-house.all') }}"
 

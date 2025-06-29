@@ -55,5 +55,9 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
     Route::controller(WareHouseController::class)->group(function () {
         Route::get('/ware-house-list', 'index')->name('ware-house.all');
         Route::get('/ware-house-create', 'create')->name('ware-house.create');
+        Route::post('/ware-house-store', 'store')->name('ware-house.store');
+        Route::get('/ware-house-edit/{id}', 'edit')->name('ware-house.edit');
+        Route::post('/ware-house-update/{id}', 'update')->name('ware-house.update');
+        Route::delete('/ware-house-update/{id}', 'delete')->name('ware-house.delete');
     });
 });
