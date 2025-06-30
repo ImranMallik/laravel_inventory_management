@@ -64,6 +64,11 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
 
     //*** Route Supplier ***//
     Route::controller(SupplierController::class)->group(function () {
-        Route::get('/suppliers', 'index')->name('supplier.all');
+        Route::get('/suppliers-list', 'index')->name('supplier.all');
+        Route::get('/supplier-create', 'create')->name('supplier.create');
+        Route::post('/supplier-store', 'store')->name('supplier.store');
+        Route::get('/supplier-edit/{id}', 'edit')->name('supplier.edit');
+        Route::post('/supplier-update/{id}', 'update')->name('supplier.update');
+        Route::delete('/supplier-delete/{id}', 'delete')->name('supplier.delete');
     });
 });
