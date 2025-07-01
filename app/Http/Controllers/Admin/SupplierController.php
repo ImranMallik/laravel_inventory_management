@@ -69,7 +69,7 @@ class SupplierController extends Controller
             $supplier->save();
           return response()->json([
                 'status' => 'success',
-                'message' => 'Updated created successfully',
+                'message' => 'Supplier Updated successfully',
                 'data' => $supplier
             ], 201);
 

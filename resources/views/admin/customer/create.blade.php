@@ -7,7 +7,7 @@
 
              <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
                  <div class="flex-grow-1">
-                     <h4 class="fs-18 fw-semibold m-0">Supplier</h4>
+                     <h4 class="fs-18 fw-semibold m-0">Customer</h4>
                  </div>
 
              </div>
@@ -17,29 +17,28 @@
                  <div class="col-xl-12">
                      <div class="card">
                          <div class="card-header">
-                             <h5 class="card-title mb-0">Add Supplier</h5>
+                             <h5 class="card-title mb-0">Add Customer</h5>
                          </div><!-- end card header -->
 
                          <div class="card-body">
-                             <form id="editSupplier" method="post" class="row g-3">
+                             <form id="customer" method="post" class="row g-3">
                                  @csrf
-                                 <input type="hidden" name="id" value="{{$suppliers->id}}">
 
                                  <div class="col-md-6">
-                                     <label for="validationDefault01" class="form-label">Supplier Name :</label>
-                                     <input type="text" class="form-control" name="name" value="{{$suppliers->name}}">
+                                     <label for="validationDefault01" class="form-label">Customer Name :</label>
+                                     <input type="text" class="form-control" name="name">
                                  </div>
                                  <div class="col-md-6">
-                                     <label for="validationDefault02" class="form-label">Supplier Email :</label>
-                                     <input type="text" class="form-control" name="email" value="{{$suppliers->email}}">
+                                     <label for="validationDefault02" class="form-label">Customer Email :</label>
+                                     <input type="text" class="form-control" name="email">
                                  </div>
                                  <div class="col-md-6">
-                                     <label for="validationDefault02" class="form-label">Supplier Phone :</label>
-                                     <input type="text" class="form-control" name="phone" value="{{$suppliers->phone}}">
+                                     <label for="validationDefault02" class="form-label">Customer Phone :</label>
+                                     <input type="text" class="form-control" name="phone">
                                  </div>
                                  <div class="col-md-6">
-                                        <label for="validationDefault02" class="form-label">Supplier Address :</label>
-                                        <textarea class="form-control" name="address" rows="3" >{{$suppliers->address}}</textarea>
+                                        <label for="validationDefault02" class="form-label">Customer Address :</label>
+                                        <textarea class="form-control" name="address" rows="3"></textarea>
                                  </div>
 
 
@@ -70,14 +69,13 @@
      <script>
          $(document).ready(function() {
 
-             $('#editSupplier').on('submit', function(e) {
+             $('#customer').on('submit', function(e) {
                  e.preventDefault();
                  //  alert();
                  let name = $('input[name="name"]').val();
                  let email = $('input[name="email"]').val();
                  let phone = $('input[name="phone"]').val();
                 let address = $('textarea[name="address"]').val();
-                let id = $('textarea[name="id"]').val();
 
                  if (!name || !email || !phone || !address) {
                      toastr.error("Please fill in all required fields.");
@@ -88,7 +86,7 @@
                  $('#saveButton').attr('disabled', true);
                  let formData = new FormData(this);
                  $.ajax({
-                    url: "{{ route('admin.supplier.update', ':id') }}".replace(':id', id),
+                     url: "{{ route('admin.customer.store') }}",
                      method: "POST",
                      data: formData,
                      processData: false,
@@ -96,9 +94,9 @@
                      success: function(response) {
                          toastr.success(response.message);
 
-                         $('#editSupplier')[0].reset();
+                         $('#customer')[0].reset();
                          setTimeout(() => {
-                             window.location.href = "{{ route('admin.supplier.all') }}"
+                             window.location.href = "{{ route('admin.customer.all') }}"
 
                          }, 1500);
                      },

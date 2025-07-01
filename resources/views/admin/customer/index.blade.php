@@ -12,7 +12,7 @@
 
                 <div class="text-end">
                     <ol class="breadcrumb m-0 py-0">
-                        <a href="{{ route('admin.supplier.create') }}" class="btn btn-secondary"> + Add</a>
+                        <a href="{{ route('admin.customer.create') }}" class="btn btn-secondary"> + Add</a>
                     </ol>
                 </div>
             </div>
@@ -49,11 +49,11 @@
                                             <td>{{ $item->address }}</td>
                                             <td>
 
-                                                <a href="{{ route('admin.supplier.edit', $item->id) }}"
+                                                <a href="{{ route('admin.customer.edit', $item->id) }}"
                                                     class="btn btn-success btn-sm">Edit</a>
 
 
-                                                <a href="{{ route('admin.supplier.delete', $item->id) }}"
+                                                <a href="{{ route('admin.customer.delete', $item->id) }}"
                                                     class="btn btn-danger btn-sm delete-item" id="delete">Delete</a>
                                             </td>
                                         </tr>
