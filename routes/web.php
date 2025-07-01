@@ -75,6 +75,11 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
 
     // *** Route Customer ***//
     Route::controller(CustomerController::class)->group(function () {
-        Route::get('/customers', 'index')->name('customer.all');
+        Route::get('/customers-list', 'index')->name('customer.all');
+        Route::get('/customers-create','create')->name('customer.create');
+        Route::post('/customers-store','store')->name('customer.store');
+        Route::get('/customers-edit/{id}','edit')->name('customer.edit');
+        Route::post('/customers-update/{id}','update')->name('customer.update');
+        Route::delete('/customers-delete/{id}','delete')->name('customer.delete');
     });
 });
