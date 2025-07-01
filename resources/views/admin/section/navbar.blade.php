@@ -84,6 +84,23 @@
                         </ul>
                     </div>
                 </li>
+                <li>
+                    <a href="#customerManage" data-bs-toggle="collapse">
+                        <i data-feather="user"></i>
+
+
+                        <span> Manage Customer </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="customerManage">
+                        <ul class="nav-second-level">
+                            <li>
+                                <a href="{{ route('admin.customer.all') }}" class="tp-link">All Customer</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
 
                 <li>
                     <a href="#sidebarError" data-bs-toggle="collapse">

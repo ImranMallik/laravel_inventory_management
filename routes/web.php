@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\WareHouseController;
@@ -70,5 +71,10 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
         Route::get('/supplier-edit/{id}', 'edit')->name('supplier.edit');
         Route::post('/supplier-update/{id}', 'update')->name('supplier.update');
         Route::delete('/supplier-delete/{id}', 'delete')->name('supplier.delete');
+    });
+
+    // *** Route Customer ***//
+    Route::controller(CustomerController::class)->group(function () {
+        Route::get('/customers', 'index')->name('customer.all');
     });
 });
