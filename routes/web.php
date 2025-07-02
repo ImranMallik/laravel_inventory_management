@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\WareHouseController;
@@ -76,10 +77,15 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
     // *** Route Customer ***//
     Route::controller(CustomerController::class)->group(function () {
         Route::get('/customers-list', 'index')->name('customer.all');
-        Route::get('/customers-create','create')->name('customer.create');
-        Route::post('/customers-store','store')->name('customer.store');
-        Route::get('/customers-edit/{id}','edit')->name('customer.edit');
-        Route::post('/customers-update/{id}','update')->name('customer.update');
-        Route::delete('/customers-delete/{id}','delete')->name('customer.delete');
+        Route::get('/customers-create', 'create')->name('customer.create');
+        Route::post('/customers-store', 'store')->name('customer.store');
+        Route::get('/customers-edit/{id}', 'edit')->name('customer.edit');
+        Route::post('/customers-update/{id}', 'update')->name('customer.update');
+        Route::delete('/customers-delete/{id}', 'delete')->name('customer.delete');
+    });
+
+    // *** Route Manage Category ***//
+    Route::controller(ProductController::class)->group(function () {
+        Route::get('/category-list', 'index')->name('category.all');
     });
 });

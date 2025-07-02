@@ -101,6 +101,23 @@
                         </ul>
                     </div>
                 </li>
+                <li>
+                    <a href="#productManage" data-bs-toggle="collapse">
+                        <i data-feather="shopping-cart"></i>
+
+
+                        <span> Manage Product </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="productManage">
+                        <ul class="nav-second-level">
+                            <li>
+                                <a href="{{ route('admin.category.all') }}" class="tp-link">All Category</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
 
                 <li>
                     <a href="#sidebarError" data-bs-toggle="collapse">
