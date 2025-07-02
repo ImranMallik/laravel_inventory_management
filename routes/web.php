@@ -87,5 +87,8 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
     // *** Route Manage Category ***//
     Route::controller(ProductController::class)->group(function () {
         Route::get('/category-list', 'index')->name('category.all');
+        Route::post('/category-store', 'store')->name('category.store');
+        Route::post('/category-update/{id}', 'update')->name('category.update');
+        Route::delete('/category-delete/{id}', 'delete')->name('category.delete');
     });
 });
