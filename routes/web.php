@@ -91,4 +91,10 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
         Route::post('/category-update/{id}', 'update')->name('category.update');
         Route::delete('/category-delete/{id}', 'delete')->name('category.delete');
     });
+    //*** All Product Route ***//
+
+    Route::controller(ProductController::class)->group(function () {
+        Route::get('all-products', 'productIndex')->name('all-products');
+        Route::get('all-products-create', 'productCreate')->name('all-products.create');
+    });
 });

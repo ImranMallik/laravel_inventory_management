@@ -116,6 +116,12 @@
                             </li>
 
                         </ul>
+                        <ul class="nav-second-level">
+                            <li>
+                                <a href="{{ route('admin.all-products') }}" class="tp-link">All Products</a>
+                            </li>
+
+                        </ul>
                     </div>
                 </li>
 

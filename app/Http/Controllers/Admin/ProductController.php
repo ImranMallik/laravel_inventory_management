@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Product;
+use App\Models\Supplier;
+use App\Models\WareHouse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -14,14 +18,15 @@ class ProductController extends Controller
         $categories = Category::latest()->get();
         return view('admin.category.index', compact('categories'));
     }
-    public function store(Request $request){
-        try{
+    public function store(Request $request)
+    {
+        try {
             $validateData = $request->validate([
-                'name'=>['required']
+                'name' => ['required']
             ]);
 
             $category = new Category();
-            $category->name=$request->name;
+            $category->name = $request->name;
             $category->slug = Str::slug($request->name);
             $category->save();
 
@@ -30,17 +35,17 @@ class ProductController extends Controller
                 'message' => 'Category created successfully',
                 'data' => $category
             ], 201);
-
-        }catch(\Exception $e){
-         return response()->json([
+        } catch (\Exception $e) {
+            return response()->json([
                 'status' => 'error',
                 'message' => 'Something went wrong.',
                 'error' => $e->getMessage()
             ], 500);
-       }
+        }
     }
-    public function delete(string $id){
-         $category = Category::findOrFail($id);
+    public function delete(string $id)
+    {
+        $category = Category::findOrFail($id);
         $category->delete();
         return response()->json([
             'status' => 'success',
@@ -48,15 +53,16 @@ class ProductController extends Controller
         ]);
     }
 
-    public function update(Request $request){
-       try{
+    public function update(Request $request)
+    {
+        try {
             $validateData = $request->validate([
-                 'id' => ['required', 'exists:categories,id'],
-                'name'=>['required']
+                'id' => ['required', 'exists:categories,id'],
+                'name' => ['required']
             ]);
 
             $category = Category::findOrfail($request->id);
-            $category->name=$request->name;
+            $category->name = $request->name;
             $category->slug = Str::slug($request->name);
             $category->save();
 
@@ -65,13 +71,30 @@ class ProductController extends Controller
                 'message' => 'Updated created successfully',
                 'data' => $category
             ], 201);
-
-        }catch(\Exception $e){
-         return response()->json([
+        } catch (\Exception $e) {
+            return response()->json([
                 'status' => 'error',
                 'message' => 'Something went wrong.',
                 'error' => $e->getMessage()
             ], 500);
-       }
+        }
+    }
+
+
+    // Product Method
+    public function productIndex()
+    {
+        $allData = Product::orderBy('id', 'desc')->get();
+        return view('admin.product.index', compact('allData'));
+    }
+
+
+    public function productCreate()
+    {
+        $categories = Category::all();
+        $brands = Brand::all();
+        $suppliers = Supplier::all();
+        $warehouses = WareHouse::all();
+        return view('admin.product.create', compact('categories', 'brands', 'suppliers', 'warehouses'));
     }
 }
