@@ -1,5 +1,11 @@
  @extends('admin.layouts.master')
  @section('content')
+     <style>
+         .table td,
+         .table th {
+             white-space: normal !important;
+         }
+     </style>
      <div class="content">
 
          <!-- Start Content-->
@@ -48,14 +54,14 @@
                                              <td>{{ $item->phone }}</td>
                                              <td>{{ $item->address }}</td>
                                              <td>
-
-                                                 <a href="{{ route('admin.supplier.edit', $item->id) }}"
-                                                     class="btn btn-success btn-sm">Edit</a>
-
-
-                                                 <a href="{{ route('admin.supplier.delete', $item->id) }}"
-                                                     class="btn btn-danger btn-sm delete-item" id="delete">Delete</a>
+                                                 <div style="display: flex; gap: 5px;">
+                                                     <a href="{{ route('admin.supplier.edit', $item->id) }}"
+                                                         class="btn btn-success btn-sm">Edit</a>
+                                                     <a href="{{ route('admin.supplier.delete', $item->id) }}"
+                                                         class="btn btn-danger btn-sm delete-item">Delete</a>
+                                                 </div>
                                              </td>
+
                                          </tr>
                                      @endforeach
 
@@ -74,3 +80,12 @@
 
      </div>
  @endsection
+
+ @push('scripts')
+     <script>
+         $('#datatable').DataTable({
+             responsive: true,
+             autoWidth: false
+         });
+     </script>
+ @endpush
