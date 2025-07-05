@@ -16,7 +16,7 @@ use App\Traits\ImageUploadTrait;
 class ProductController extends Controller
 {
 
-     use ImageUploadTrait;
+    use ImageUploadTrait;
 
     public function index()
     {
@@ -103,7 +103,7 @@ class ProductController extends Controller
         return view('admin.product.create', compact('categories', 'brands', 'suppliers', 'warehouses'));
     }
 
-  
+
     public function productStore(Request $request)
     {
         try {
@@ -160,7 +160,6 @@ class ProductController extends Controller
                 'message' => 'Product created successfully',
                 'data'    => $product
             ], 201);
-
         } catch (Exception $e) {
             return response()->json([
                 'status'  => 'error',
@@ -169,7 +168,8 @@ class ProductController extends Controller
             ], 500);
         }
     }
-    public function productDelete(string $id){
+    public function productDelete(string $id)
+    {
         $product = Product::findOrFail($id);
         $this->deleteImage($product->image);
 
@@ -179,7 +179,13 @@ class ProductController extends Controller
             'status' => 'success',
             'message' => 'Product deleted successfully!',
         ]);
-
     }
 
+    // Product Details
+
+    public function productsDetails($id)
+    {
+        $product = Product::findOrFail($id);
+        return view('admin.product.product_details', compact('product'));
+    }
 }

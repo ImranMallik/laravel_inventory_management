@@ -98,6 +98,6 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
         Route::get('all-products-create', 'productCreate')->name('all-products.create');
         Route::post('all-products-store', 'productStore')->name('all-products.store');
         Route::delete('all-products-delete/{id}', 'productDelete')->name('all-products.delete');
-       
+        Route::get('product-details/{id}', 'productsDetails')->name('get.products.details');
     });
 });

@@ -63,9 +63,16 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <a href="#" class="btn btn-success btn-sm">Edit</a>
+                                                <a title="Details"
+                                                    href="{{ route('admin.get.products.details', $item->id) }}"
+                                                    class="btn btn-info btn-sm"> <span
+                                                        class="mdi mdi-eye-circle mdi-18px"></span> </a>
+
+                                                <a href="#" class="btn btn-success btn-sm"><span
+                                                        class="mdi mdi-book-edit mdi-18px"></span></a>
                                                 <a href="{{ route('admin.all-products.delete', $item->id) }}"
-                                                    class="btn btn-danger btn-sm delete-item" id="delete">Delete</a>
+                                                    class="btn btn-danger btn-sm delete-item" id="delete"><span
+                                                        class="mdi mdi-delete-circle  mdi-18px"></span></a>
                                             </td>
                                         </tr>
                                     @endforeach
