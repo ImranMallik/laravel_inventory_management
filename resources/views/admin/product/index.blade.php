@@ -44,10 +44,10 @@
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>
-                                                @php
-                                                    $primaryImage =
-                                                        $item->image->first()->image ?? '/upload/no_image.jpg';
-                                                @endphp
+                                               @php
+    $images = json_decode($item->image, true);
+    $primaryImage = $images[0] ?? '/upload/no_image.jpg';
+@endphp
                                                 <img src="{{ asset($primaryImage) }}" alt="img" width="40px">
                                             </td>
                                             <td>{{ $item->name }}</td>
@@ -64,7 +64,7 @@
                                             </td>
                                             <td>
                                                 <a href="#" class="btn btn-success btn-sm">Edit</a>
-                                                <a href="#" class="btn btn-danger btn-sm" id="delete">Delete</a>
+                                                <a href="{{route('admin.all-products.delete',$item->id)}}" class="btn btn-danger btn-sm" id="delete">Delete</a>
                                             </td>
                                         </tr>
                                     @endforeach
