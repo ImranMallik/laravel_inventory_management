@@ -73,7 +73,7 @@
                                                 <label class="form-label">Stock Alert: <span
                                                         class="text-danger">*</span></label>
                                                 <input type="number" name="stock_alert" class="form-control"
-                                                    placeholder="Enter Stock Alert" min="0" >
+                                                    placeholder="Enter Stock Alert" min="0">
 
                                             </div>
 
@@ -131,7 +131,7 @@
                                             <label class="form-label">Product Quantity: <span
                                                     class="text-danger">*</span></label>
                                             <input type="number" name="product_qty" class="form-control"
-                                                placeholder="Enter Product Quantity" min="1" >
+                                                placeholder="Enter Product Quantity" min="1">
 
                                         </div>
 
@@ -150,7 +150,10 @@
                                 </div>
                                 <div class="col-xl-12">
                                     <div class="d-flex mt-5 justify-content-start">
-                                        <button class="btn btn-primary me-3" type="submit">Save</button>
+                                        <button class="btn btn-primary me-3" id="saveButton" type="submit">
+                                            <span id="spinner" class="spinner-border spinner-border-sm me-2 d-none"
+                                                role="status" aria-hidden="true"></span>
+                                            Save</button>
                                         <a class="btn btn-secondary" href="{{ route('admin.all-products') }}">Cancel</a>
                                     </div>
                                 </div>
@@ -221,87 +224,136 @@
                 }
             });
         });
-
-    
     </script>
     @push('scripts')
-   <script>
-    $(document).ready(function(){
-        $('#addProduct').on('submit', function(e){
-            e.preventDefault();
+        <script>
+            $(document).ready(function() {
+                $('#addProduct').on('submit', function(e) {
+                    e.preventDefault();
 
-            let isInvalid = false; // ✅ Add this line
+                    let isInvalid = false;
 
-            let requiredFields = [
-                { name: 'name', type: 'input' },
-                { name: 'code', type: 'input' },
-                { name: 'category_id', type: 'select' },
-                { name: 'brand_id', type: 'select' },
-                { name: 'price', type: 'input' },
-                { name: 'stock_alert', type: 'input' },
-                { name: 'note', type: 'textarea' },
-                { name: 'image[]', type: 'file' },
-                { name: 'warehouse_id', type: 'select' },
-                { name: 'supplier_id', type: 'select' },
-                { name: 'product_qty', type: 'input' },
-                { name: 'status', type: 'select' }
-            ];
+                    let requiredFields = [{
+                            name: 'name',
+                            type: 'input'
+                        },
+                        {
+                            name: 'code',
+                            type: 'input'
+                        },
+                        {
+                            name: 'category_id',
+                            type: 'select'
+                        },
+                        {
+                            name: 'brand_id',
+                            type: 'select'
+                        },
+                        {
+                            name: 'price',
+                            type: 'input'
+                        },
+                        {
+                            name: 'stock_alert',
+                            type: 'input'
+                        },
+                        {
+                            name: 'note',
+                            type: 'textarea'
+                        },
+                        {
+                            name: 'image[]',
+                            type: 'file'
+                        },
+                        {
+                            name: 'warehouse_id',
+                            type: 'select'
+                        },
+                        {
+                            name: 'supplier_id',
+                            type: 'select'
+                        },
+                        {
+                            name: 'product_qty',
+                            type: 'input'
+                        },
+                        {
+                            name: 'status',
+                            type: 'select'
+                        }
+                    ];
 
-            for (let i = 0; i < requiredFields.length; i++) {
-                let field = requiredFields[i];
-                let element = $(`[name="${field.name}"]`);
-
-                if (field.type === 'file') {
-                    if (element[0].files.length === 0) {
-                        isInvalid = true;
-                        toastr.error(`${field.name.replace(/_/g, ' ')} is required`);
-                        element.focus();
-                        break;
-                    }
-                } else {
-                    let value = element.val();
-                    if (!value) {
-                        isInvalid = true;
-                        toastr.error(`${field.name.replace(/_/g, ' ')} is required`);
-                        element.focus();
-                        break;
-                    }
-                }
-            }
-
-            if (isInvalid) return;
-
-            let formData = new FormData(this);
-
-            $.ajax({
-                url: "{{ route('admin.all-products.store') }}",
-                method: "POST",
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    toastr.success(response.message);
-                    $('#addProduct')[0].reset();
-                    setTimeout(() => {
-                        window.location.href = "{{ route('admin.all-products') }}";
-                    }, 1500);
-                },
-                error: function(xhr) {
-                    let errors = xhr.responseJSON?.errors;
-                    if (errors) {
-                        $.each(errors, function(key, value) {
-                            toastr.error(value[0]);
+                    for (let i = 0; i < requiredFields.length; i++) {
+                        let field = requiredFields[i];
+                        let element = $(`[name="${field.name}"]`);
+                        element.css({
+                            'border': '',
+                            'border-radius': ''
                         });
-                    } else {
-                        toastr.error("An unexpected error occurred.");
+
+                        if (field.type === 'file') {
+                            if (element[0].files.length === 0) {
+                                isInvalid = true;
+                                // toastr.error(`${field.name.replace(/_/g, ' ')} is required`);
+                                element.css({
+                                    'border': '2px solid red',
+                                    'border-radius': '5px'
+                                });
+                                element.focus();
+                                break;
+                            }
+                        } else {
+                            let value = element.val();
+                            if (!value) {
+                                isInvalid = true;
+                                // toastr.error(`${field.name.replace(/_/g, ' ')} is required`);
+                                element.css({
+                                    'border': '2px solid red',
+                                    'border-radius': '5px'
+                                });
+                                element.focus();
+                                break;
+                            }
+                        }
                     }
-                },
+
+                    if (isInvalid) return;
+
+                    let formData = new FormData(this);
+                    $('#spinner').removeClass('d-none');
+                    $('#saveButton').attr('disabled', true);
+
+                    $.ajax({
+                        url: "{{ route('admin.all-products.store') }}",
+                        method: "POST",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            toastr.success(response.message);
+                            $('#addProduct')[0].reset();
+                            setTimeout(() => {
+                                window.location.href = "{{ route('admin.all-products') }}";
+                            }, 1500);
+                        },
+                        error: function(xhr) {
+                            let errors = xhr.responseJSON?.errors;
+                            if (errors) {
+                                $.each(errors, function(key, value) {
+                                    toastr.error(value[0]);
+                                });
+                            } else {
+                                toastr.error("An unexpected error occurred.");
+                            }
+                        },
+                        complete: function() {
+                            $('#spinner').addClass('d-none');
+                            $('#saveButton').removeAttr('disabled');
+                        }
+                    });
+
+                });
             });
-
-        });
-    });
-</script>
-
-        
+        </script>
     @endpush
 @endsection
