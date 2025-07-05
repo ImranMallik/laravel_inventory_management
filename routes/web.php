@@ -96,5 +96,8 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
     Route::controller(ProductController::class)->group(function () {
         Route::get('all-products', 'productIndex')->name('all-products');
         Route::get('all-products-create', 'productCreate')->name('all-products.create');
+        Route::post('all-products-store', 'productStore')->name('all-products.store');
+        Route::delete('all-products-delete/{id}', 'productDelete')->name('all-products.delete');
+       
     });
 });

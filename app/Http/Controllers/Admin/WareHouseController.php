@@ -23,7 +23,7 @@ class WareHouseController extends Controller
              $validateData = $request->validate([
                 'name' => ['required'],
                 'email' => ['required'],
-                'phone' => ['required','max:10'],
+                'phone' => ['required', 'digits:10'],
                 'city' => ['required']
             ]);
 
