@@ -99,5 +99,12 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
         Route::post('all-products-store', 'productStore')->name('all-products.store');
         Route::delete('all-products-delete/{id}', 'productDelete')->name('all-products.delete');
         Route::get('product-details/{id}', 'productsDetails')->name('get.products.details');
+        Route::get('product-edit/{id}', 'productsEdit')->name('all-products.edit');
+
+        // Delete Image
+        Route::post('admin/product/delete-main-image', 'deleteMainImage')->name('product.delete-main-image');
+        Route::post('admin/product/delete-extra-image',  'deleteExtraImage')->name('product.delete-extra-image');
+        // update Route
+        Route::post('product-update/{id}', 'productUpdate')->name('all-products.update');
     });
 });

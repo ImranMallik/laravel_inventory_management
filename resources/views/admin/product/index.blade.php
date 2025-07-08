@@ -68,7 +68,8 @@
                                                     class="btn btn-info btn-sm"> <span
                                                         class="mdi mdi-eye-circle mdi-18px"></span> </a>
 
-                                                <a href="#" class="btn btn-success btn-sm"><span
+                                                <a href="{{ route('admin.all-products.edit', $item->id) }}"
+                                                    class="btn btn-success btn-sm"><span
                                                         class="mdi mdi-book-edit mdi-18px"></span></a>
                                                 <a href="{{ route('admin.all-products.delete', $item->id) }}"
                                                     class="btn btn-danger btn-sm delete-item" id="delete"><span
