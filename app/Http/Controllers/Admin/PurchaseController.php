@@ -26,6 +26,7 @@ class PurchaseController extends Controller
 
   public function purchaseProductSearch(Request $request)
   {
+    // dd($request->all());
     $query = trim($request->input('query'));
     $warehouse_id = $request->input('warehouse_id');
 
@@ -40,5 +41,13 @@ class PurchaseController extends Controller
       ->orderBy('name')
       ->limit(10)
       ->get();
+
+    return response()->json($products);
   }
+
+  // public function purchaseProductSearch(Request $request)
+  // {
+  //   // dd($request->all());
+  //   return response()->json(['status' => 'OK', 'query' => $request->query()]);
+  // }
 }

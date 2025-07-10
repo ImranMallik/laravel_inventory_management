@@ -51,7 +51,7 @@
                                                 <img src="{{ asset($primaryImage) }}" alt="img" width="40px">
                                             </td>
                                             <td>{{ $item->name }}</td>
-                                            <td>{{ $item->warehouse_id }}</td>
+                                            <td>{{ $item->warehouse->name }}</td>
                                             <td>{{ $item->price }}</td>
                                             <td>
                                                 @if ($item->product_qty <= 3)

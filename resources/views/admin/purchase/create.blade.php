@@ -85,10 +85,10 @@
                                             <div class="col-md-12">
                                                 <label class="form-label">Order items: <span
                                                         class="text-danger">*</span></label>
-                                                <table class="table table-striped table-bordered dataTable"
-                                                    style="width: 100%;">
+                                                <table id="orderItemsTable"
+                                                    class="table table-striped table-bordered dataTable">
                                                     <thead>
-                                                        <tr role="row">
+                                                        <tr>
                                                             <th>Product</th>
                                                             <th>Net Unit Cost</th>
                                                             <th>Stock</th>
@@ -98,10 +98,9 @@
                                                             <th>Action</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody>
-
-                                                    </tbody>
+                                                    <tbody></tbody>
                                                 </table>
+
                                             </div>
                                         </div>
 
@@ -114,15 +113,15 @@
                                                                 <tbody>
                                                                     <tr>
                                                                         <td class="py-3">Discount</td>
-                                                                        <td class="py-3" id="displayDiscount">TK 0.00</td>
+                                                                        <td class="py-3" id="displayDiscount">₹ 0.00</td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td class="py-3">Shipping</td>
-                                                                        <td class="py-3" id="shippingDisplay">TK 0.00</td>
+                                                                        <td class="py-3" id="shippingDisplay">₹ 0.00</td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td class="py-3 text-primary">Grand Total</td>
-                                                                        <td class="py-3 text-primary" id="grandTotal">TK
+                                                                        <td class="py-3 text-primary" id="grandTotal">₹
                                                                             0.00</td>
                                                                         <input type="hidden" name="grand_total">
                                                                     </tr>
@@ -146,7 +145,7 @@
                                                                     </tr>
                                                                     <tr class="d-none">
                                                                         <td class="py-3">Due Amount</td>
-                                                                        <td class="py-3" id="dueAmount">TK 0.00</td>
+                                                                        <td class="py-3" id="dueAmount">₹ 0.00</td>
                                                                         <input type="hidden" name="due_amount">
                                                                     </tr>
 
@@ -220,6 +219,136 @@
                 allowClear: true,
                 width: '100%'
             });
+
+            // Search Product
+            let productSearchInput = $("#product_search");
+            let warehouseDropdown = $("#warehouse_id");
+            let productList = $("#product_list");
+            let warehouseError = $("#warehouse_error");
+            let orderItemsTableBody = $("#orderItemsTable tbody");
+
+
+            const productSearchUrl = "{{ route('admin.purchase-products.search') }}";
+
+            // Search Product
+            productSearchInput.on("keyup", function() {
+                let query = $(this).val();
+                let warehouse_id = warehouseDropdown.val();
+
+                if (!warehouse_id) {
+                    warehouseError.removeClass('d-none');
+                    productList.html("");
+                    return;
+                } else {
+                    warehouseError.addClass('d-none');
+                }
+
+                if (query.length > 1) {
+                    fetchProducts(query, warehouse_id);
+                } else {
+                    productList.html("");
+                }
+            });
+
+            function fetchProducts(query, warehouse_id) {
+                $.ajax({
+                    url: productSearchUrl,
+                    type: "GET",
+                    data: {
+                        query: query,
+                        warehouse_id: warehouse_id
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        productList.html("");
+
+                        if (data.length > 0) {
+                            $.each(data, function(index, product) {
+                                let item = `<a href="#" class="list-group-item list-group-item-action product-item"
+                            data-id="${product.id}"
+                            data-code="${product.code}"
+                            data-name="${product.name}"
+                            data-cost="${product.price}"
+                            data-stock="${product.product_qty}">
+                            <span class="mdi mdi-text-search"></span>
+                            ${product.code} - ${product.name}
+                        </a>`;
+                                productList.append(item);
+                            });
+
+                            // Product item click handler
+                            $(".product-item").on("click", function(e) {
+                                e.preventDefault();
+                                addProductToTable($(this));
+                            });
+                        } else {
+                            productList.html('<p class="text-muted">No Product Found</p>');
+                        }
+                    }
+                });
+            }
+
+            // Add Product to Order Table
+            function addProductToTable($product) {
+                let productId = $product.data("id");
+                let productCode = $product.data("code");
+                let productName = $product.data("name");
+                let netUnitCost = parseFloat($product.data("cost"));
+                let stock = parseInt($product.data("stock"));
+
+                // Check if product already added
+                if ($(`tr[data-id="${productId}"]`).length > 0) {
+                    alert("Product already added.");
+                    return;
+                }
+
+                let row = `
+            <tr data-id="${productId}">
+                <td>
+                    ${productCode} - ${productName}
+                    <button type="button" class="btn btn-primary btn-sm edit-discount-btn"
+                        data-id="${productId}" 
+                        data-name="${productName}" 
+                        data-cost="${netUnitCost}"
+                        data-bs-toggle="modal">
+                        <span class="mdi mdi-book-edit"></span>
+                    </button>
+                    <input type="hidden" name="products[${productId}][id]" value="${productId}">
+                    <input type="hidden" name="products[${productId}][name]" value="${productName}">
+                    <input type="hidden" name="products[${productId}][code]" value="${productCode}">
+                </td>
+                <td>${netUnitCost.toFixed(2)}
+                    <input type="hidden" name="products[${productId}][cost]" value="${netUnitCost}">
+                </td>
+                <td style="color:#ffc121">${stock}</td>
+                <td>
+                    <div class="input-group">
+                        <button class="btn btn-outline-secondary decrement-qty" type="button">−</button>
+                        <input type="text" class="form-control text-center qty-input"
+                            name="products[${productId}][quantity]" value="1" min="1" max="${stock}"
+                            data-cost="${netUnitCost}" style="width: 30px;">
+                        <button class="btn btn-outline-secondary increment-qty" type="button">+</button>
+                    </div>
+                </td>
+                <td>
+                    <input type="number" class="form-control discount-input"
+                        name="products[${productId}][discount]" value="0" min="0" style="width:100px">
+                </td>
+                <td class="subtotal">${netUnitCost.toFixed(2)}</td>
+                <td>
+                    <button class="btn btn-danger btn-sm remove-product">
+                        <span class="mdi mdi-delete-circle mdi-18px"></span>
+                    </button>
+                </td>
+            </tr>
+        `;
+
+                orderItemsTableBody.append(row);
+                productList.html("");
+                productSearchInput.val("");
+            }
+
+
         });
     </script>
 @endpush
