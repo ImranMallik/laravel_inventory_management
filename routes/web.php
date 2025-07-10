@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
+use App\Http\Controllers\Admin\PurchaseController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\WareHouseController;
 use App\Http\Controllers\ProfileController;
@@ -106,5 +107,12 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
         Route::post('admin/product/delete-extra-image',  'deleteExtraImage')->name('product.delete-extra-image');
         // update Route
         Route::post('product-update/{id}', 'productUpdate')->name('all-products.update');
+    });
+
+    // Purchase Controller 
+    Route::controller(PurchaseController::class)->group(function () {
+        Route::get('all-purchase', 'index')->name('all-purchase');
+        Route::get('create-purchase', 'create')->name('create-purchase');
+        Route::get('/products/search',  'purchaseProductSearch')->name('products.search');
     });
 });
