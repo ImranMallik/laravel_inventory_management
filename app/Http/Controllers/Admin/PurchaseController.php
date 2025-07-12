@@ -44,10 +44,4 @@ class PurchaseController extends Controller
 
     return response()->json($products);
   }
-
-  // public function purchaseProductSearch(Request $request)
-  // {
-  //   // dd($request->all());
-  //   return response()->json(['status' => 'OK', 'query' => $request->query()]);
-  // }
 }
