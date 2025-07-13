@@ -133,4 +133,11 @@ class PurchaseController extends Controller
       ], 500);
     }
   }
+
+  public function DetailsPurchase($id){
+        $purchase = Purchase::with(['supplier','purchaseItems.product'])->find($id);
+        return view('admin.purchase.purchase_view',compact('purchase'));
+
+    }
+
 }
