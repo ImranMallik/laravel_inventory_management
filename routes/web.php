@@ -114,5 +114,6 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
         Route::get('all-purchase', 'index')->name('all-purchase');
         Route::get('create-purchase', 'create')->name('create-purchase');
         Route::get('/products/search',  'purchaseProductSearch')->name('purchase-products.search');
+        Route::post('store-purchase', 'purchaseStore')->name('purchase-store');
     });
 });

@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Purchase;
+use App\Models\PurchaseItem;
 use App\Models\Supplier;
 use App\Models\WareHouse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class PurchaseController extends Controller
 {
@@ -43,5 +46,91 @@ class PurchaseController extends Controller
       ->get();
 
     return response()->json($products);
+  }
+
+  // Store Data 
+  public function purchaseStore(Request $request)
+  {
+    // dd($request->all());
+    $validator = Validator::make($request->all(), [
+      'date' => 'required|date',
+      'warehouse_id' => 'required|exists:ware_houses,id',
+      'supplier_id' => 'required|exists:suppliers,id',
+      'discount' => 'nullable|numeric|min:0',
+      'shipping' => 'nullable|numeric|min:0',
+      'status' => 'required|in:Received,Pending,Ordered',
+      'note' => 'nullable|string',
+      'grand_total' => 'required|numeric|min:0',
+      'products' => 'required|array|min:1',
+      'products.*.id' => 'required|exists:products,id',
+      'products.*.quantity' => 'required|integer|min:1',
+      'products.*.cost' => 'required|numeric|min:0',
+      'products.*.discount' => 'nullable|numeric|min:0',
+    ]);
+
+    // Return validation errors
+    if ($validator->fails()) {
+      return response()->json(['errors' => $validator->errors()], 422);
+    }
+
+    DB::beginTransaction();
+
+    try {
+      // Create Purchase
+      $purchase = Purchase::create([
+        'date' => $request->date,
+        'warehouse_id' => $request->warehouse_id,
+        'supplier_id' => $request->supplier_id,
+        'discount' => $request->discount ?? 0,
+        'shipping' => $request->shipping ?? 0,
+        'status' => $request->status,
+        'note' => $request->note,
+        'grand_total' => $request->grand_total,
+      ]);
+
+      // Loop through products
+      foreach ($request->products as $productId => $product) {
+        $quantity = $product['quantity'];
+        $cost = $product['cost'];
+        $discount = $product['discount'] ?? 0;
+        $subtotal = ($cost * $quantity) - $discount;
+
+        // Create Purchase Item
+        PurchaseItem::create([
+          'purchase_id' => $purchase->id,
+          'product_id' => $productId,
+          'net_unit_cost' => $cost,
+          'stock' => $quantity, // quantity received
+          'quantity' => $quantity,
+          'discount' => $discount,
+          'subtotal' => $subtotal,
+        ]);
+
+        // Update product stock (decrement if stock is used)
+        $productModel = Product::where('id', $productId)
+          ->where('product_qty', '>=', $quantity)
+          ->first();
+
+        if (!$productModel) {
+          throw new \Exception("Insufficient stock for product ID: $productId");
+        }
+
+        $productModel->decrement('product_qty', $quantity);
+      }
+
+      DB::commit();
+
+      return response()->json([
+        'status' => 'success',
+        'message' => 'Purchase saved successfully!',
+      ]);
+    } catch (\Exception $e) {
+      DB::rollBack();
+
+      return response()->json([
+        'status' => 'error',
+        'message' => 'Purchase failed: ' . $e->getMessage(),
+      ], 500);
+    }
   }
 }

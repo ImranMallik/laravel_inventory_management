@@ -42,7 +42,7 @@
                                     @foreach ($allData as $key => $item)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $item->warehouse_id }}</td>
+                                            <td>{{ $item->warehouse->name }}</td>
                                             <td>{{ $item->status }}</td>
                                             <td>${{ $item->grand_total }}</td>
                                             <td>Cash</td>
@@ -54,9 +54,8 @@
                                                 <a title="Edit" href="#" class="btn btn-success btn-sm"> <span
                                                         class="mdi mdi-book-edit mdi-18px"></span> </a>
 
-                                                <a title="Delete" href="{{ route('delete.product', $item->id) }}"
-                                                    class="btn btn-danger btn-sm" id="delete"><span
-                                                        class="mdi mdi-delete-circle  mdi-18px"></span></a>
+                                                <a title="Delete" href="#" class="btn btn-danger btn-sm"
+                                                    id="delete"><span class="mdi mdi-delete-circle  mdi-18px"></span></a>
                                             </td>
                                         </tr>
                                     @endforeach
