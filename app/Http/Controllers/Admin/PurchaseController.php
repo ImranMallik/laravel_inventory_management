@@ -134,10 +134,26 @@ class PurchaseController extends Controller
     }
   }
 
-  public function DetailsPurchase($id){
+  // Purchase_Details
+  public function detailsPurchase($id){
         $purchase = Purchase::with(['supplier','purchaseItems.product'])->find($id);
         return view('admin.purchase.purchase_view',compact('purchase'));
 
     }
+    
+   public function deletePurchase($id)
+{
+    $purchase = Purchase::with('purchaseItems')->findOrFail($id);
 
+    // Delete related purchase items
+    $purchase->purchaseItems()->delete();
+
+    // Delete the purchase itself
+    $purchase->delete();
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Purchase and related items deleted successfully.'
+    ]);
+}
 }

@@ -116,6 +116,7 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
         Route::get('/products/search',  'purchaseProductSearch')->name('purchase-products.search');
         Route::post('store-purchase', 'purchaseStore')->name('purchase-store');
         Route::post('store-purchase', 'purchaseStore')->name('purchase-store');
-        Route::get('details-purchase/{id}', 'DetailsPurchase')->name('get.purchase.details');
+        Route::get('details-purchase/{id}', 'detailsPurchase')->name('get.purchase.details');
+        Route::delete('delete-purchase/{id}', 'deletePurchase')->name('purchase-delete');
     });
 });
