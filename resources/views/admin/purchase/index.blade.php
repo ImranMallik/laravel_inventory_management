@@ -48,13 +48,13 @@
                                             <td>Cash</td>
                                             <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y-m-d') }}</td>
                                             <td>
-                                                <a title="Details" href="#" class="btn btn-info btn-sm"> <span
+                                                <a title="Details" href="{{ route('admin.get.purchase.details', $item->id) }}" class="btn btn-info btn-sm"> <span
                                                         class="mdi mdi-eye-circle mdi-18px"></span> </a>
 
                                                 <a title="Edit" href="#" class="btn btn-success btn-sm"> <span
                                                         class="mdi mdi-book-edit mdi-18px"></span> </a>
 
-                                                <a title="Delete" href="#" class="btn btn-danger btn-sm"
+                                                <a title="Delete"  href="{{ route('admin.purchase-delete', $item->id) }}" class="btn btn-danger btn-sm"
                                                     id="delete"><span class="mdi mdi-delete-circle  mdi-18px"></span></a>
                                             </td>
                                         </tr>
