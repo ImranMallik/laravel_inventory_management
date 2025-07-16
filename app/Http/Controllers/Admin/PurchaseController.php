@@ -156,4 +156,12 @@ class PurchaseController extends Controller
         'message' => 'Purchase and related items deleted successfully.'
     ]);
 }
+public function EditPurchase($id){
+        $editData = Purchase::with('purchaseItems.product')->findOrFail($id);
+        $suppliers = Supplier::all();
+        $warehouses = WareHouse::all();
+        return view('admin.purchase.edit',compact('editData','suppliers','warehouses'));
+    }
+  
+
 }

@@ -51,7 +51,7 @@
                                                 <a title="Details" href="{{ route('admin.get.purchase.details', $item->id) }}" class="btn btn-info btn-sm"> <span
                                                         class="mdi mdi-eye-circle mdi-18px"></span> </a>
 
-                                                <a title="Edit" href="#" class="btn btn-success btn-sm"> <span
+                                                <a title="Edit" href="{{ route('admin.edit.purchase', $item->id) }}" class="btn btn-success btn-sm"> <span
                                                         class="mdi mdi-book-edit mdi-18px"></span> </a>
 
                                                 <a title="Delete"  href="{{ route('admin.purchase-delete', $item->id) }}" class="btn btn-danger btn-sm delete-item"

@@ -118,5 +118,6 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
         Route::post('store-purchase', 'purchaseStore')->name('purchase-store');
         Route::get('details-purchase/{id}', 'detailsPurchase')->name('get.purchase.details');
         Route::delete('delete-purchase/{id}', 'deletePurchase')->name('purchase-delete');
+        Route::get('/edit/purchase/{id}', 'EditPurchase')->name('edit.purchase'); 
     });
 });
