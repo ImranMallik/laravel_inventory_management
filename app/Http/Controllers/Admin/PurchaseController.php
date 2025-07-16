@@ -27,6 +27,8 @@ class PurchaseController extends Controller
     return view('admin.purchase.create', compact('suppliers', 'warehouses'));
   }
 
+
+
   public function purchaseProductSearch(Request $request)
   {
     // dd($request->all());
@@ -88,6 +90,7 @@ class PurchaseController extends Controller
         'grand_total' => $request->grand_total,
       ]);
 
+
       // Loop through products
       foreach ($request->products as $productId => $product) {
         $quantity = $product['quantity'];
@@ -100,7 +103,7 @@ class PurchaseController extends Controller
           'purchase_id' => $purchase->id,
           'product_id' => $productId,
           'net_unit_cost' => $cost,
-          'stock' => $quantity, // quantity received
+          'stock' => $quantity,
           'quantity' => $quantity,
           'discount' => $discount,
           'subtotal' => $subtotal,
@@ -135,14 +138,14 @@ class PurchaseController extends Controller
   }
 
   // Purchase_Details
-  public function detailsPurchase($id){
-        $purchase = Purchase::with(['supplier','purchaseItems.product'])->find($id);
-        return view('admin.purchase.purchase_view',compact('purchase'));
+  public function detailsPurchase($id)
+  {
+    $purchase = Purchase::with(['supplier', 'purchaseItems.product'])->find($id);
+    return view('admin.purchase.purchase_view', compact('purchase'));
+  }
 
-    }
-    
-   public function deletePurchase($id)
-{
+  public function deletePurchase($id)
+  {
     $purchase = Purchase::with('purchaseItems')->findOrFail($id);
 
     // Delete related purchase items
@@ -152,16 +155,111 @@ class PurchaseController extends Controller
     $purchase->delete();
 
     return response()->json([
-        'status' => 'success',
-        'message' => 'Purchase and related items deleted successfully.'
+      'status' => 'success',
+      'message' => 'Purchase and related items deleted successfully.'
     ]);
-}
-public function EditPurchase($id){
-        $editData = Purchase::with('purchaseItems.product')->findOrFail($id);
-        $suppliers = Supplier::all();
-        $warehouses = WareHouse::all();
-        return view('admin.purchase.edit',compact('editData','suppliers','warehouses'));
-    }
-  
+  }
+  public function EditPurchase($id)
+  {
+    $editData = Purchase::with('purchaseItems.product')->findOrFail($id);
+    $suppliers = Supplier::all();
+    $warehouses = WareHouse::all();
+    return view('admin.purchase.edit', compact('editData', 'suppliers', 'warehouses'));
+  }
 
+  public function purchaseUpdate(Request $request, $id)
+  {
+    // dd($request->all());
+    $validator = Validator::make($request->all(), [
+      'date' => 'required|date',
+      'warehouse_id' => 'required|exists:ware_houses,id',
+      'supplier_id' => 'required|exists:suppliers,id',
+      'discount' => 'nullable|numeric|min:0',
+      'shipping' => 'nullable|numeric|min:0',
+      'status' => 'required|in:Received,Pending,Ordered',
+      'note' => 'nullable|string',
+      'grand_total' => 'required|numeric|min:0',
+      'products' => 'required|array|min:1',
+      'products.*.quantity' => 'required|integer|min:1',
+      'products.*.net_unit_cost' => 'required|numeric|min:0',
+      'products.*.discount' => 'nullable|numeric|min:0',
+      'products.*.subtotal' => 'required|numeric|min:0',
+    ]);
+
+    if ($validator->fails()) {
+      return response()->json(['errors' => $validator->errors()], 422);
+    }
+
+    DB::beginTransaction();
+
+    try {
+      $purchase = Purchase::findOrFail($id);
+
+      // Revert product stock first (add back previous quantities)
+      foreach ($purchase->purchaseItems as $oldItem) {
+        $product = Product::find($oldItem->product_id);
+        if ($product) {
+          $product->increment('product_qty', $oldItem->quantity);
+        }
+      }
+
+      // Delete old items
+      $purchase->purchaseItems()->delete();
+
+      // Update purchase
+      $purchase->update([
+        'date' => $request->date,
+        'warehouse_id' => $request->warehouse_id,
+        'supplier_id' => $request->supplier_id,
+        'discount' => $request->discount ?? 0,
+        'shipping' => $request->shipping ?? 0,
+        'status' => $request->status,
+        'note' => $request->note,
+        'grand_total' => $request->grand_total,
+      ]);
+
+      // Add updated items
+      foreach ($request->products as $productId => $productData) {
+        $quantity = $productData['quantity'];
+        $cost = $productData['net_unit_cost'];
+        $discount = $productData['discount'] ?? 0;
+        $subtotal = $productData['subtotal'];
+
+        PurchaseItem::create([
+          'purchase_id' => $purchase->id,
+          'product_id' => $productId,
+          'net_unit_cost' => $cost,
+          'stock' => $quantity,
+          'quantity' => $quantity,
+          'discount' => $discount,
+          'subtotal' => $subtotal,
+        ]);
+
+        // Decrease product stock again with new values
+        $productModel = Product::where('id', $productId)
+          ->where('product_qty', '>=', $quantity)
+          ->first();
+
+        if (!$productModel) {
+          throw new \Exception("Insufficient stock for product ID: $productId");
+        }
+
+        $productModel->decrement('product_qty', $quantity);
+      }
+
+      DB::commit();
+
+      return response()->json([
+        'status' => 'success',
+        'message' => 'Purchase updated successfully!',
+      ]);
+    } catch (\Exception $e) {
+      DB::rollBack();
+
+      return response()->json([
+        'status' => 'error',
+        'message' => 'Update failed: ' . $e->getMessage(),
+      ], 500);
+    }
+  }
 }

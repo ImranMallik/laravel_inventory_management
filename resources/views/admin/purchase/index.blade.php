@@ -44,18 +44,26 @@
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $item->warehouse->name }}</td>
                                             <td>{{ $item->status }}</td>
-                                            <td>${{ $item->grand_total }}</td>
+                                            <td>₹{{ $item->grand_total }}</td>
                                             <td>Cash</td>
                                             <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y-m-d') }}</td>
                                             <td>
-                                                <a title="Details" href="{{ route('admin.get.purchase.details', $item->id) }}" class="btn btn-info btn-sm"> <span
+                                                <a title="Details"
+                                                    href="{{ route('admin.get.purchase.details', $item->id) }}"
+                                                    class="btn btn-info btn-sm"> <span
                                                         class="mdi mdi-eye-circle mdi-18px"></span> </a>
 
-                                                <a title="Edit" href="{{ route('admin.edit.purchase', $item->id) }}" class="btn btn-success btn-sm"> <span
+                                                <a title="PDF Invoice" href="#" class="btn btn-primary btn-sm"> <span
+                                                        class="mdi mdi-download-circle mdi-18px"></span> </a>
+
+
+                                                <a title="Edit" href="{{ route('admin.edit.purchase', $item->id) }}"
+                                                    class="btn btn-success btn-sm"> <span
                                                         class="mdi mdi-book-edit mdi-18px"></span> </a>
 
-                                                <a title="Delete"  href="{{ route('admin.purchase-delete', $item->id) }}" class="btn btn-danger btn-sm delete-item"
-                                                    id="delete"><span class="mdi mdi-delete-circle  mdi-18px"></span></a>
+                                                <a title="Delete" href="{{ route('admin.purchase-delete', $item->id) }}"
+                                                    class="btn btn-danger btn-sm delete-item" id="delete"><span
+                                                        class="mdi mdi-delete-circle  mdi-18px"></span></a>
                                             </td>
                                         </tr>
                                     @endforeach
