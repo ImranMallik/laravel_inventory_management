@@ -11,6 +11,7 @@ use App\Models\WareHouse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PurchaseController extends Controller
 {
@@ -261,5 +262,14 @@ class PurchaseController extends Controller
         'message' => 'Update failed: ' . $e->getMessage(),
       ], 500);
     }
+  }
+
+
+  // Purchase Invoice 
+  public function purchaseInvoice($id)
+  {
+    $purchase = Purchase::with(['supplier', 'warehouse', 'purchaseItems', 'product'])->find($id);
+    $pdf = Pdf::loadView('admin.purchase.invoice_pdf', compact('purchase'));
+    return $pdf->download('purchase_' . $id);
   }
 }

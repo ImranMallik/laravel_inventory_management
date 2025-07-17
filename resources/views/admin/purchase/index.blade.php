@@ -53,7 +53,9 @@
                                                     class="btn btn-info btn-sm"> <span
                                                         class="mdi mdi-eye-circle mdi-18px"></span> </a>
 
-                                                <a title="PDF Invoice" href="#" class="btn btn-primary btn-sm"> <span
+                                                <a title="PDF Invoice"
+                                                    href="{{ route('admin.purchaseInvoice', $item->id) }}"
+                                                    class="btn btn-primary btn-sm"> <span
                                                         class="mdi mdi-download-circle mdi-18px"></span> </a>
 
 

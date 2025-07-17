@@ -120,5 +120,6 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
         Route::delete('delete-purchase/{id}', 'deletePurchase')->name('purchase-delete');
         Route::get('/edit/purchase/{id}', 'EditPurchase')->name('edit.purchase');
         Route::put('/admin/purchase/{id}',  'purchaseUpdate')->name('purchase-update');
+        Route::get('purchase/invoice/{id}', 'purchaseInvoice')->name('purchaseInvoice');
     });
 });
