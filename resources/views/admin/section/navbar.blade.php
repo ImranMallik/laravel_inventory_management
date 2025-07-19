@@ -127,22 +127,23 @@
                 <li>
                     <a href="#purchaseManage" data-bs-toggle="collapse">
                         <i data-feather="clipboard"></i>
-
-
-
-
                         <span> Purchase Manage </span>
                         <span class="menu-arrow"></span>
                     </a>
+
                     <div class="collapse" id="purchaseManage">
                         <ul class="nav-second-level">
                             <li>
                                 <a href="{{ route('admin.all-purchase') }}" class="tp-link">All Purchase</a>
                             </li>
-
+                            <li>
+                                <a href="{{ route('admin.all-purchase-return') }}" class="tp-link">All Purchase
+                                    Return</a>
+                            </li>
                         </ul>
                     </div>
                 </li>
+
 
                 <li>
                     <a href="#sidebarError" data-bs-toggle="collapse">
