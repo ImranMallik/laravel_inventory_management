@@ -54,16 +54,18 @@
                                                         class="mdi mdi-eye-circle mdi-18px"></span> </a>
 
                                                 <a title="PDF Invoice"
-                                                    href="{{ route('admin.purchaseInvoice', $item->id) }}"
+                                                    href="{{ route('admin.purchaseReturnInvoice', $item->id) }}"
                                                     class="btn btn-primary btn-sm"> <span
                                                         class="mdi mdi-download-circle mdi-18px"></span> </a>
 
 
-                                                <a title="Edit" href="{{ route('admin.edit.purchase-return', $item->id) }}"
+                                                <a title="Edit"
+                                                    href="{{ route('admin.edit.purchase-return', $item->id) }}"
                                                     class="btn btn-success btn-sm"> <span
                                                         class="mdi mdi-book-edit mdi-18px"></span> </a>
 
-                                                <a title="Delete" href="{{ route('admin.purchase-return-delete', $item->id) }}"
+                                                <a title="Delete"
+                                                    href="{{ route('admin.purchase-return-delete', $item->id) }}"
                                                     class="btn btn-danger btn-sm delete-item" id="delete"><span
                                                         class="mdi mdi-delete-circle  mdi-18px"></span></a>
                                             </td>
