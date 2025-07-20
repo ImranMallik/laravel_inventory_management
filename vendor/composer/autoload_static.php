@@ -213,9 +213,9 @@ class ComposerStaticInit9dacaa41589619867b3cc454bb600c5c
         ),
         'phpDocumentor\\Reflection\\' => 
         array (
-            0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
-            1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
-            2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+            0 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+            1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+            2 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
         ),
         'Whoops\\' => 
         array (
@@ -630,6 +630,7 @@ class ComposerStaticInit9dacaa41589619867b3cc454bb600c5c
         'App\\Http\\Controllers\\Admin\\ProductController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/ProductController.php',
         'App\\Http\\Controllers\\Admin\\ProfileController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/ProfileController.php',
         'App\\Http\\Controllers\\Admin\\PurchaseController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/PurchaseController.php',
+        'App\\Http\\Controllers\\Admin\\ReturnPurchaseController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/ReturnPurchaseController.php',
         'App\\Http\\Controllers\\Admin\\SupplierController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/SupplierController.php',
         'App\\Http\\Controllers\\Admin\\WareHouseController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/WareHouseController.php',
         'App\\Http\\Controllers\\Auth\\AuthenticatedSessionController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/AuthenticatedSessionController.php',
@@ -654,6 +655,8 @@ class ComposerStaticInit9dacaa41589619867b3cc454bb600c5c
         'App\\Models\\ProductImage' => __DIR__ . '/../..' . '/app/Models/ProductImage.php',
         'App\\Models\\Purchase' => __DIR__ . '/../..' . '/app/Models/Purchase.php',
         'App\\Models\\PurchaseItem' => __DIR__ . '/../..' . '/app/Models/PurchaseItem.php',
+        'App\\Models\\ReturnPurchase' => __DIR__ . '/../..' . '/app/Models/ReturnPurchase.php',
+        'App\\Models\\ReturnPurchaseItem' => __DIR__ . '/../..' . '/app/Models/ReturnPurchaseItem.php',
         'App\\Models\\Supplier' => __DIR__ . '/../..' . '/app/Models/Supplier.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Models\\WareHouse' => __DIR__ . '/../..' . '/app/Models/WareHouse.php',

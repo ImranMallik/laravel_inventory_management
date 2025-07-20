@@ -116,7 +116,6 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
         Route::get('create-purchase', 'create')->name('create-purchase');
         Route::get('/products/search',  'purchaseProductSearch')->name('purchase-products.search');
         Route::post('store-purchase', 'purchaseStore')->name('purchase-store');
-        Route::post('store-purchase', 'purchaseStore')->name('purchase-store');
         Route::get('details-purchase/{id}', 'detailsPurchase')->name('get.purchase.details');
         Route::delete('delete-purchase/{id}', 'deletePurchase')->name('purchase-delete');
         Route::get('/edit/purchase/{id}', 'EditPurchase')->name('edit.purchase');
@@ -127,5 +126,14 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
     //Purchase Return Controller 
     Route::controller(ReturnPurchaseController::class)->group(function () {
         Route::get('all-purchase-return', 'index')->name('all-purchase-return');
+        Route::get('create-purchase-return', 'create')->name('create-purchase-return');
+        Route::get('/products/search',  'purchaseReturnProductSearch')->name('purchase-return-products.search');
+        Route::post('store-purchase-return', 'purchaseReturnStore')->name('purchase-return-store');
+        Route::get('details-purchase-return/{id}', 'detailsPurchaseReturn')->name('get.purchase-return.details');
+        Route::delete('delete-purchase-return/{id}', 'deletePurchaseReturn')->name('purchase-return-delete');
+        Route::get('/edit/purchase-return/{id}', 'editPurchaseReturn')->name('edit.purchase-return');
+        Route::put('/admin/purchase-return/{id}',  'purchaseReturnUpdate')->name('purchase-return-update');
+        Route::get('purchase-return/invoice/{id}', 'purchaseReturnInvoice')->name('purchaseReturnInvoice');
+
     });
 });
