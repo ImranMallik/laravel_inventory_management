@@ -6,12 +6,12 @@
 
             <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
                 <div class="flex-grow-1">
-                    <h4 class="fs-18 fw-semibold m-0">All Purchase</h4>
+                    <h4 class="fs-18 fw-semibold m-0">Return Purchase</h4>
                 </div>
 
                 <div class="text-end">
                     <ol class="breadcrumb m-0 py-0">
-                        <a href="{{ route('admin.create-purchase') }}" class="btn btn-secondary"> + Add Purchase</a>
+                        <a href="{{ route('admin.create-purchase-return') }}" class="btn btn-secondary"> + Add Purchase</a>
                     </ol>
                 </div>
             </div>
@@ -49,7 +49,7 @@
                                             <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y-m-d') }}</td>
                                             <td>
                                                 <a title="Details"
-                                                    href="{{ route('admin.get.purchase.details', $item->id) }}"
+                                                    href="{{ route('admin.get.purchase-return.details', $item->id) }}"
                                                     class="btn btn-info btn-sm"> <span
                                                         class="mdi mdi-eye-circle mdi-18px"></span> </a>
 
@@ -59,11 +59,11 @@
                                                         class="mdi mdi-download-circle mdi-18px"></span> </a>
 
 
-                                                <a title="Edit" href="{{ route('admin.edit.purchase', $item->id) }}"
+                                                <a title="Edit" href="{{ route('admin.edit.purchase-return', $item->id) }}"
                                                     class="btn btn-success btn-sm"> <span
                                                         class="mdi mdi-book-edit mdi-18px"></span> </a>
 
-                                                <a title="Delete" href="{{ route('admin.purchase-delete', $item->id) }}"
+                                                <a title="Delete" href="{{ route('admin.purchase-return-delete', $item->id) }}"
                                                     class="btn btn-danger btn-sm delete-item" id="delete"><span
                                                         class="mdi mdi-delete-circle  mdi-18px"></span></a>
                                             </td>

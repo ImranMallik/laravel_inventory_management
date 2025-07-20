@@ -16,4 +16,6 @@ class ReturnPurchaseItem extends Model
     {
         return $this->belongsTo(ReturnPurchase::class, 'return_purchase_id', 'id');
     }
+     
+   
 }
