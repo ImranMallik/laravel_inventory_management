@@ -18,19 +18,19 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class ReturnPurchaseController extends Controller
 {
-    public function index()
-    {
-        $allData = ReturnPurchase::orderBy('id', 'desc')->get();
-        return view('admin.purchase.purchase-return.index', compact('allData'));
-    }
-     public function create()
+  public function index()
+  {
+    $allData = ReturnPurchase::orderBy('id', 'desc')->get();
+    return view('admin.purchase.purchase-return.index', compact('allData'));
+  }
+  public function create()
   {
     $suppliers = Supplier::all();
     $warehouses = WareHouse::all();
     return view('admin.purchase.purchase-return.create', compact('suppliers', 'warehouses'));
   }
 
-   public function purchaseReturnProductSearch(Request $request)
+  public function purchaseReturnProductSearch(Request $request)
   {
     // dd($request->all());
     $query = trim($request->input('query'));
@@ -51,7 +51,7 @@ class ReturnPurchaseController extends Controller
     return response()->json($products);
   }
   // Store Data 
-  public function purchaseReturnStore (Request $request)
+  public function purchaseReturnStore(Request $request)
   {
     // dd($request->all());
     $validator = Validator::make($request->all(), [
@@ -136,19 +136,19 @@ class ReturnPurchaseController extends Controller
       ], 500);
     }
   }
-  
+
   // Purchase_Details
   public function detailsPurchaseReturn($id)
-{
+  {
     $returnPurchase = ReturnPurchase::with([
-        'supplier',
-        'warehouse',
-        'return_purchase_items.product'
+      'supplier',
+      'warehouse',
+      'return_purchase_items.product'
     ])->findOrFail($id);
 
     return view('admin.purchase.purchase-return.purchase_return_view', compact('returnPurchase'));
-}
- public function editPurchaseReturn($id)
+  }
+  public function editPurchaseReturn($id)
   {
     $editData = ReturnPurchase::with('return_purchase_items.product')->findOrFail($id);
     $suppliers = Supplier::all();
@@ -156,7 +156,7 @@ class ReturnPurchaseController extends Controller
     return view('admin.purchase.purchase-return.edit', compact('editData', 'suppliers', 'warehouses'));
   }
 
-   public function deletePurchaseReturn($id)
+  public function deletePurchaseReturn($id)
   {
     $returnPurchase = ReturnPurchase::with('purchaseItems')->findOrFail($id);
 
@@ -172,9 +172,9 @@ class ReturnPurchaseController extends Controller
     ]);
   }
 
- public function purchaseReturnUpdate(Request $request, $id)
-{
-   $validator = Validator::make($request->all(), [
+  public function purchaseReturnUpdate(Request $request, $id)
+  {
+    $validator = Validator::make($request->all(), [
       'date' => 'required|date',
       'warehouse_id' => 'required|exists:ware_houses,id',
       'supplier_id' => 'required|exists:suppliers,id',
@@ -265,13 +265,12 @@ class ReturnPurchaseController extends Controller
         'message' => 'Update failed: ' . $e->getMessage(),
       ], 500);
     }
-}
+  }
   // Purchase Invoice 
   public function purchaseReturnInvoice($id)
   {
-    $returnparchase = ReturnPurchase::with(['supplier', 'warehouse', 'return_purchase_items', 'product'])->find($id);
+    $returnparchase = ReturnPurchase::with(['supplier', 'warehouse', 'return_purchase_items',])->find($id);
     $pdf = Pdf::loadView('admin.purchase.purchase-return.invoice_pdf', compact('returnparchase'));
     return $pdf->download('purchase_Return_' . $id);
   }
-
 }

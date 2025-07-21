@@ -190,13 +190,13 @@
 
         <table class="summary-table">
             <tr>
-                <td><strong>Total Discount:</strong> ₹{{ number_format($purchase->discount, 2) }} </td>
+                <td><strong>Total Discount:</strong> ₹{{ number_format($returnparchase->discount, 2) }} </td>
             </tr>
             <tr>
-                <td><strong>Shipping Cost:</strong> ₹{{ number_format($purchase->shipping, 2) }} </td>
+                <td><strong>Shipping Cost:</strong> ₹{{ number_format($returnparchase->shipping, 2) }} </td>
             </tr>
             <tr>
-                <td><strong>Grand Total:</strong> ₹{{ number_format($purchase->grand_total, 2) }} </td>
+                <td><strong>Grand Total:</strong> ₹{{ number_format($returnparchase->grand_total, 2) }} </td>
             </tr>
         </table>
     </div>
