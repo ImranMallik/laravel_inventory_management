@@ -143,6 +143,25 @@
                         </ul>
                     </div>
                 </li>
+                <li>
+                    <a href="#saleManage" data-bs-toggle="collapse">
+                        <i data-feather="trending-up"></i>
+                        <span> Sale Manage </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+
+                    <div class="collapse" id="saleManage">
+                        <ul class="nav-second-level">
+                            <li>
+                                <a href="{{ route('admin.sale.items-list') }}" class="tp-link">All Sale</a>
+                            </li>
+                            {{-- <li>
+                                <a href="{{ route('admin.all-purchase-return') }}" class="tp-link">All Purchase
+                                    Return</a>
+                            </li> --}}
+                        </ul>
+                    </div>
+                </li>
 
 
                 <li>

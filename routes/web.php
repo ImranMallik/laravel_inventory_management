@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\Admin\PurchaseController;
 use App\Http\Controllers\Admin\ReturnPurchaseController;
+use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\WareHouseController;
 use App\Http\Controllers\ProfileController;
@@ -134,5 +135,10 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
         Route::get('/edit/purchase-return/{id}', 'editPurchaseReturn')->name('edit.purchase-return');
         Route::put('/admin/purchase-return/{id}',  'purchaseReturnUpdate')->name('purchase-return-update');
         Route::get('purchase-return/invoice/{id}', 'purchaseReturnInvoice')->name('purchaseReturnInvoice');
+    });
+
+    // Sale Route--------
+    Route::controller(SaleController::class)->group(function () {
+        Route::get('sale-items-list', 'index')->name('sale.items-list');
     });
 });
