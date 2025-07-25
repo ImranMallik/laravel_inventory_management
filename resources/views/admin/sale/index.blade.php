@@ -11,7 +11,7 @@
 
                 <div class="text-end">
                     <ol class="breadcrumb m-0 py-0">
-                        <a href="{{ route('admin.create-purchase') }}" class="btn btn-secondary"> + Add Sale</a>
+                        <a href="{{ route('admin.sale.items-create') }}" class="btn btn-secondary"> + Add Sale</a>
                     </ol>
                 </div>
             </div>

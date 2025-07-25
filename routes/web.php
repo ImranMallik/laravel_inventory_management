@@ -140,5 +140,7 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
     // Sale Route--------
     Route::controller(SaleController::class)->group(function () {
         Route::get('sale-items-list', 'index')->name('sale.items-list');
+        Route::get('sale-items-create', 'create')->name('sale.items-create');
+        Route::post('sale-items-store', 'storeStore')->name('sales-store');
     });
 });
