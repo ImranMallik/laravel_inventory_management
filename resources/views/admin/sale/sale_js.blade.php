@@ -336,7 +336,7 @@
         $("body").append(`<div id="toastBox" style="position:fixed;top:20px;right:20px;z-index:1050;"></div>`);
 
         // Form submit
-        $('#salesForm').on('submit', function(e) {
+        $('#saleForm').on('submit', function(e) {
             e.preventDefault();
             const formData = new FormData(this);
             $('#spinner').removeClass('d-none');
