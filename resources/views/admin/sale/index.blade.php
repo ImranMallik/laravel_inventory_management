@@ -49,7 +49,7 @@
                                             <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y-m-d') }}</td>
                                             <td>
                                                 <a title="Details"
-                                                    href="{{ route('admin.get.purchase.details', $item->id) }}"
+                                                    href="{{ route('admin.get.sale.details', $item->id) }}"
                                                     class="btn btn-info btn-sm"> <span
                                                         class="mdi mdi-eye-circle mdi-18px"></span> </a>
 
@@ -59,11 +59,11 @@
                                                         class="mdi mdi-download-circle mdi-18px"></span> </a>
 
 
-                                                <a title="Edit" href="{{ route('admin.edit.purchase', $item->id) }}"
+                                                <a title="Edit" href="{{ route('admin.sales-edit', $item->id) }}"
                                                     class="btn btn-success btn-sm"> <span
                                                         class="mdi mdi-book-edit mdi-18px"></span> </a>
 
-                                                <a title="Delete" href="{{ route('admin.purchase-delete', $item->id) }}"
+                                                <a title="Delete" href="{{ route('admin.sale-delete', $item->id) }}"
                                                     class="btn btn-danger btn-sm delete-item" id="delete"><span
                                                         class="mdi mdi-delete-circle  mdi-18px"></span></a>
                                             </td>

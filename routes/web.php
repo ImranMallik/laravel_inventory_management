@@ -141,6 +141,10 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
     Route::controller(SaleController::class)->group(function () {
         Route::get('sale-items-list', 'index')->name('sale.items-list');
         Route::get('sale-items-create', 'create')->name('sale.items-create');
-        Route::post('sale-items-store', 'storeStore')->name('sales-store');
+        Route::post('sale-items-store', 'saleStore')->name('sales-store');
+        Route::get('sale-items-edit/{id}', 'saleEdit')->name('sales-edit');
+        Route::get('sale-details/{id}', 'saleDetails')->name('get.sale.details');
+        Route::delete('sale-delete/{id}', 'saleDelete')->name('sale-delete');
+        
     });
 });
