@@ -3,8 +3,10 @@
         const productBody = $("#productBody");
         const discountInput = $("#inputDiscount");
         const shippingInput = $("#inputShipping");
-        const grandTotalDisplay = $("#grandTotal");
+        const paidAmountInput = $("input[name='paid_amount']");
+        const grandTotalInput = $("#grand_total_input");
 
+        // --- Subtotal Calculation ---
         function updateSubtotal($row) {
             const qty = parseFloat($row.find(".qty-input").val()) || 1;
             const unitCost = parseFloat($row.find(".qty-input").data("cost")) || 0;
@@ -18,16 +20,8 @@
 
             updateGrandTotal();
         }
-        function updateDueAmount() {
-            const grandTotal = parseFloat($("input[name='grand_total']").val()) || 0;
-            const paidAmount = parseFloat($("input[name='paid_amount']").val()) || 0;
-            let due = grandTotal - paidAmount;
-            if (due < 0) due = 0;
 
-            $("#dueAmount").text(`₹ ${due.toFixed(2)}`);
-            $("input[name='due_amount']").val(due.toFixed(2));
-        }
-
+        // --- Grand Total Calculation ---
         function updateGrandTotal() {
             let grandTotal = 0;
             $(".subtotal").each(function() {
@@ -42,10 +36,23 @@
             grandTotal = Math.max(grandTotal, 0);
 
             $('#grandTotal').text(`₹ ${grandTotal.toFixed(2)}`);
-            $('#grand_total_input').val(grandTotal.toFixed(2));
+            grandTotalInput.val(grandTotal.toFixed(2));
+
+            updateDueAmount();
         }
 
+        // --- Due Calculation ---
+        function updateDueAmount() {
+            const grandTotal = parseFloat(grandTotalInput.val()) || 0;
+            const paidAmount = parseFloat(paidAmountInput.val()) || 0;
+            let due = grandTotal - paidAmount;
+            if (due < 0) due = 0;
 
+            $("#dueAmount").text(`₹ ${due.toFixed(2)}`);
+            $("input[name='due_amount']").val(due.toFixed(2));
+        }
+
+        // --- Bind Row Events ---
         function bindEvents() {
             $(".qty-input").off().on("input", function() {
                 updateSubtotal($(this).closest("tr"));
@@ -75,7 +82,7 @@
             });
         }
 
-        // Modal for editing price/discount
+        // --- Modal Setup ---
         const modalHtml = `
         <div id="discountModal" class="modal fade" tabindex="-1">
             <div class="modal-dialog">
@@ -102,10 +109,10 @@
                     </div>
                 </div>
             </div>
-        </div>
-    `;
+        </div>`;
         $("body").append(modalHtml);
 
+        // --- Modal Functionality ---
         $(document).on("click", ".edit-discount-btn", function() {
             const $row = $(this).closest("tr");
             const rowId = $row.data("id");
@@ -141,28 +148,38 @@
             $("#discountModal").modal("hide");
         });
 
-        // Grand total live updates
+        // --- Live Updates ---
         discountInput.on("input", updateGrandTotal);
         shippingInput.on("input", updateGrandTotal);
 
-        // AJAX Update Submit
+        paidAmountInput.on("input", function() {
+            const val = parseFloat($(this).val()) || 0;
+            const grand = parseFloat(grandTotalInput.val()) || 0;
+
+            if (val > grand) {
+                $(this).addClass('is-invalid');
+            } else {
+                $(this).removeClass('is-invalid');
+            }
+
+            updateDueAmount();
+        });
+
+        // --- AJAX Form Submit ---
         $('#purchaseUpdateForm').on('submit', function(e) {
             e.preventDefault();
 
             const formData = new FormData(this);
             const purchaseId = $('#purchase_id').val();
-            let updateUrl = "{{ route('admin.purchase-update', ':id') }}".replace(':id',
-                '{{ $editData->id }}');
+            const updateUrl = "{{ route('admin.purchase-update', ':id') }}".replace(':id', purchaseId);
 
-
-            // Add spoofed PUT method for Laravel
             formData.append('_method', 'PUT');
 
             $('#spinner').removeClass('d-none');
 
             $.ajax({
                 url: updateUrl,
-                type: 'POST', // Laravel reads _method=PUT from form data
+                type: 'POST',
                 data: formData,
                 processData: false,
                 contentType: false,
@@ -190,34 +207,34 @@
             });
         });
 
-
+        // --- Toasts ---
         function showToast(message) {
             const toast = $(`
-            <div class="toast align-items-center text-white bg-danger border-0 show" style="min-width:250px;margin-bottom:10px;">
-                <div class="d-flex">
-                    <div class="toast-body">${message}</div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto"></button>
-                </div>
-            </div>`);
+                <div class="toast align-items-center text-white bg-danger border-0 show" style="min-width:250px;margin-bottom:10px;">
+                    <div class="d-flex">
+                        <div class="toast-body">${message}</div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto"></button>
+                    </div>
+                </div>`);
             $("#toastBox").append(toast);
             setTimeout(() => toast.fadeOut(400, () => toast.remove()), 3000);
         }
 
         function showSuccessToast(message) {
             const toast = $(`
-            <div class="toast align-items-center text-white bg-success border-0 show" style="min-width:250px;margin-bottom:10px;">
-                <div class="d-flex">
-                    <div class="toast-body">${message}</div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto"></button>
-                </div>
-            </div>`);
+                <div class="toast align-items-center text-white bg-success border-0 show" style="min-width:250px;margin-bottom:10px;">
+                    <div class="d-flex">
+                        <div class="toast-body">${message}</div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto"></button>
+                    </div>
+                </div>`);
             $("#toastBox").append(toast);
             setTimeout(() => toast.fadeOut(400, () => toast.remove()), 3000);
         }
 
         $("body").append(`<div id="toastBox" style="position:fixed;top:20px;right:20px;z-index:1050;"></div>`);
 
-        // Initial bindings
+        // --- Init ---
         bindEvents();
         updateGrandTotal();
     });
