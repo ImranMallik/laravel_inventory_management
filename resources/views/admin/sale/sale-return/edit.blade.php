@@ -4,9 +4,9 @@
         <div class="d-flex flex-column-fluid">
             <div class="container-fluid my-4">
                 <div class="d-md-flex align-items-center justify-content-between">
-                    <h3 class="mb-0">Edit Sale</h3>
+                    <h3 class="mb-0">Edit Sale Return</h3>
                     <div class="text-end my-2 mt-md-0"><a class="btn btn-outline-primary"
-                            href="{{ route('admin.all-purchase') }}">Back</a></div>
+                            href="{{ route('admin.sale-item.return') }}">Back</a></div>
                 </div>
 
 
@@ -104,7 +104,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody id="productBody">
-                                                        @foreach ($editData->saleItems as $item)
+                                                        @foreach ($editData->saleReturnItems as $item)
                                                             <tr data-id={{ $item->id }}>
 
                                                                 <td class="d-flex align-items-center gap-2">
@@ -312,5 +312,5 @@
 @endsection
 
 @push('scripts')
-    @include('admin.sale.edit_sale_js')
+    @include('admin.sale.sale-return.edit_sale_return_js')
 @endpush

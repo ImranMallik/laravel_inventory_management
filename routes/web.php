@@ -157,5 +157,8 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
         Route::post('sale-return-store', 'saleReturnStore')->name('sales-return-store');
         Route::get('sale-return-details/{id}', 'saleReturnDetails')->name('get.sale-return.details');
         Route::get('sale-return/invoice/{id}', 'saleReturnInvoice')->name('sale.return.Invoice');
+        Route::get('sale-return/edit/{id}', 'saleReturnEdit')->name('sale.return.edit');
+        Route::put('sale-return/update/{id}', 'saleReturnUpdate')->name('sale.return.update');
+        Route::delete('sale-return/delete/{id}', 'saleReturnDelete')->name('sale.return.delete');
     });
 });

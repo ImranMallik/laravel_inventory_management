@@ -129,4 +129,128 @@ class SaleReturnController extends Controller
         $pdf = Pdf::loadView('admin.sale.sale-return.invoice_pdf', compact('sales'));
         return $pdf->download('sales_return_' . $id . '.pdf');
     }
+
+    public function saleReturnEdit($id){
+        $editData = SaleReturn::with('saleReturnItems', 'product')->findOrFail($id);
+        $customers = Customer::all();
+        $warehouses = WareHouse::all();
+        return view('admin.sale.sale-return.edit', compact('editData', 'customers', 'warehouses'));
+    }
+
+  public function saleReturnUpdate(Request $request, $id)
+{
+    $validator = Validator::make($request->all(), [
+        'date' => 'required|date',
+        'warehouse_id' => 'required|exists:ware_houses,id',
+        'customer_id' => 'required|exists:customers,id',
+        'discount' => 'nullable|numeric|min:0',
+        'shipping' => 'nullable|numeric|min:0',
+        'status' => 'required|in:Received,Pending,Ordered',
+        'note' => 'nullable|string',
+        'grand_total' => 'required|numeric|min:0',
+        'paid_amount' => 'nullable|numeric|min:0',
+        'due_amount' => 'nullable|numeric|min:0',
+        'products' => 'required|array|min:1',
+        'products.*.quantity' => 'required|integer|min:1',
+        'products.*.net_unit_cost' => 'required|numeric|min:0',
+        'products.*.discount' => 'nullable|numeric|min:0',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 422);
+    }
+
+    DB::beginTransaction();
+    try {
+        $sale = SaleReturn::findOrFail($id);
+
+        // 1. Revert stock from previous sale return
+        foreach ($sale->saleReturnItems as $item) {
+            $product = Product::find($item->product_id);
+            if ($product) {
+                // Add back the returned quantity (undo previous return)
+                $product->decrement('product_qty', $item->quantity);
+            }
+        }
+
+        // 2. Delete old items
+        $sale->saleReturnItems()->delete();
+
+        // 3. Update sale return record
+        $sale->update([
+            'date' => $request->date,
+            'warehouse_id' => $request->warehouse_id,
+            'customer_id' => $request->customer_id,
+            'discount' => $request->discount ?? 0,
+            'shipping' => $request->shipping ?? 0,
+            'status' => $request->status,
+            'note' => $request->note,
+            'grand_total' => $request->grand_total,
+            'paid_amount' => $request->paid_amount ?? 0,
+            'due_amount' => $request->due_amount ?? 0,
+        ]);
+
+        // 4. Add new items and adjust stock
+        foreach ($request->products as $productId => $productData) {
+            $quantity = $productData['quantity'];
+            $cost = $productData['net_unit_cost'];
+            $discount = $productData['discount'] ?? 0;
+            $subtotal = ($cost * $quantity) - $discount;
+
+            // Create new item
+            SaleReturnItem::create([
+                'sale_return_id' => $sale->id,
+                'product_id' => $productId,
+                'net_unit_cost' => $cost,
+                'stock' => $quantity,
+                'quantity' => $quantity,
+                'discount' => $discount,
+                'subtotal' => $subtotal,
+            ]);
+
+            // Update stock: Returned products increase stock
+            $product = Product::findOrFail($productId);
+            if ($quantity > $product->product_qty) {
+               throw new \Exception("Insufficient stock for product ID: $productId");
+            }
+            $product->increment('product_qty', $quantity);
+        }
+
+        DB::commit();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Sale Return updated successfully!',
+        ]);
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Update failed: ' . $e->getMessage(),
+        ], 500);
+    }
+}
+
+public function saleReturnDelete($id){
+    $sale = SaleReturn::with('saleReturnItems')->findOrFail($id);
+
+    foreach ($sale->saleReturnItems as $item) {
+
+        $product = Product::find($item->product_id);
+        if ($product) {
+            $product->decrement('product_qty', $item->quantity);
+        }
+    }
+     // Delete related purchase items
+    $sale->saleReturnItems()->delete();
+
+    // Delete the purchase itself
+    $sale->delete();
+
+    return response()->json([
+      'status' => 'success',
+      'message' => 'Sales Return and related items deleted successfully.'
+    ]);
+}
+
 }

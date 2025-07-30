@@ -67,11 +67,11 @@
                                                         class="mdi mdi-download-circle mdi-18px"></span> </a>
 
 
-                                                <a title="Edit" href="{{ route('admin.sales-edit', $item->id) }}"
+                                                <a title="Edit" href="{{ route('admin.sale.return.edit', $item->id) }}"
                                                     class="btn btn-success btn-sm"> <span
                                                         class="mdi mdi-book-edit mdi-18px"></span> </a>
 
-                                                <a title="Delete" href="{{ route('admin.sale-delete', $item->id) }}"
+                                                <a title="Delete" href="{{ route('admin.sale.return.delete', $item->id) }}"
                                                     class="btn btn-danger btn-sm delete-item" id="delete"><span
                                                         class="mdi mdi-delete-circle  mdi-18px"></span></a>
                                             </td>
