@@ -6,12 +6,12 @@
 
             <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
                 <div class="flex-grow-1">
-                    <h4 class="fs-18 fw-semibold m-0">All Sale</h4>
+                    <h4 class="fs-18 fw-semibold m-0">Sale Return</h4>
                 </div>
 
                 <div class="text-end">
                     <ol class="breadcrumb m-0 py-0">
-                        <a href="{{ route('admin.sale.items-create') }}" class="btn btn-secondary"> + Add Sale</a>
+                        <a href="{{ route('admin.sale.return-create') }}" class="btn btn-secondary"> + Add Sale</a>
                     </ol>
                 </div>
             </div>
@@ -56,11 +56,13 @@
                                             </td>
                                             <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y-m-d') }}</td>
                                             <td>
-                                                <a title="Details" href="{{ route('admin.get.sale.details', $item->id) }}"
+                                                <a title="Details"
+                                                    href="{{ route('admin.get.sale-return.details', $item->id) }}"
                                                     class="btn btn-info btn-sm"> <span
                                                         class="mdi mdi-eye-circle mdi-18px"></span> </a>
 
-                                                <a title="PDF Invoice" href="{{ route('admin.saleInvoice', $item->id) }}"
+                                                <a title="PDF Invoice"
+                                                    href="{{ route('admin.sale.return.Invoice', $item->id) }}"
                                                     class="btn btn-primary btn-sm"> <span
                                                         class="mdi mdi-download-circle mdi-18px"></span> </a>
 

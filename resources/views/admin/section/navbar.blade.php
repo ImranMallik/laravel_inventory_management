@@ -155,10 +155,10 @@
                             <li>
                                 <a href="{{ route('admin.sale.items-list') }}" class="tp-link">All Sale</a>
                             </li>
-                            {{-- <li>
-                                <a href="{{ route('admin.all-purchase-return') }}" class="tp-link">All Purchase
+                            <li>
+                                <a href="{{ route('admin.sale-item.return') }}" class="tp-link">Sale
                                     Return</a>
-                            </li> --}}
+                            </li>
                         </ul>
                     </div>
                 </li>

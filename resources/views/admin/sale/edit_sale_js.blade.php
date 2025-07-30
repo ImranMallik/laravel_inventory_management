@@ -171,7 +171,7 @@
 
             const formData = new FormData(this);
             const purchaseId = $('#purchase_id').val();
-            const updateUrl = "{{ route('admin.purchase-update', ':id') }}".replace(':id', purchaseId);
+            const updateUrl = "{{ route('admin.sales-update', ':id') }}".replace(':id', purchaseId);
 
             formData.append('_method', 'PUT');
 
@@ -186,10 +186,10 @@
                 success: function(res) {
                     $('#spinner').addClass('d-none');
                     if (res.status === 'success') {
-                        showSuccessToast(res.message || 'Purchase updated successfully.');
+                        showSuccessToast(res.message || 'Sale updated successfully.');
                         setTimeout(() => {
                             window.location.href =
-                                "{{ route('admin.all-purchase') }}";
+                                "{{ route('admin.sale.items-list') }}";
                         }, 1500);
                     } else {
                         showToast("Unexpected error: " + res.message);

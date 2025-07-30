@@ -4,18 +4,15 @@
         <div class="d-flex flex-column-fluid">
             <div class="container-fluid my-4">
                 <div class="d-md-flex align-items-center justify-content-between">
-                    <h3 class="mb-0">Edit Purchase</h3>
-                    <div class="text-end my-2 mt-md-0"><a class="btn btn-outline-primary"
-                            href="{{ route('admin.all-purchase') }}">Back</a></div>
+                    <h3 class="mb-0">Create Sales</h3>
+                    <div class="text-end my-2 mt-md-0"><a class="btn btn-outline-primary" href="#">Back</a></div>
                 </div>
 
 
                 <div class="card">
                     <div class="card-body">
-                        <form id="purchaseUpdateForm" method="POST" enctype="multipart/form-data">
+                        <form id="saleForm" action="#" method="post" enctype="multipart/form-data">
                             @csrf
-                            @method('PUT')
-                            <input type="hidden" id="purchase_id" value="{{ $editData->id }}">
 
 
                             <div class="row">
@@ -24,8 +21,8 @@
                                         <div class="row">
                                             <div class="col-md-4 mb-3">
                                                 <label class="form-label">Date: <span class="text-danger">*</span></label>
-                                                <input type="date" name="date" class="form-control"
-                                                    value="{{ $editData->date }}">
+                                                <input type="date" name="date" value="<?php echo date('Y-m-d'); ?>"
+                                                    class="form-control">
                                                 @error('date')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
@@ -36,12 +33,10 @@
                                                     <label class="form-label" for="formBasic">Warehouse : <span
                                                             class="text-danger">*</span></label>
                                                     <select name="warehouse_id" id="warehouse_id"
-                                                        class="form-control form-select" readonly>
+                                                        class="form-control form-select">
                                                         <option value="">Select Warehouse</option>
                                                         @foreach ($warehouses as $item)
-                                                            <option value="{{ $item->id }}"
-                                                                {{ $editData->warehouse_id == $item->id ? 'selected' : '' }}>
-                                                                {{ $item->name }}</option>
+                                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
                                                         @endforeach
                                                     </select>
                                                     <small id="warehouse_error" class="text-danger d-none">Please select the
@@ -57,9 +52,7 @@
                                                         class="form-control form-select">
                                                         <option value="">Select Customer</option>
                                                         @foreach ($customers as $item)
-                                                            <option value="{{ $item->id }}"
-                                                                {{ $editData->customer_id == $item->id ? 'selected' : '' }}>
-                                                                {{ $item->name }}</option>
+                                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
                                                         @endforeach
                                                     </select>
                                                     @error('supplier_id')
@@ -68,6 +61,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
 
                                         <div class="row">
                                             <div class="col-md-12 mb-3">
@@ -91,7 +85,7 @@
                                                 <label class="form-label">Order items: <span
                                                         class="text-danger">*</span></label>
                                                 <table class="table table-striped table-bordered dataTable"
-                                                    style="width: 100%;">
+                                                    style="width: 100%;" id="salesTable">
                                                     <thead>
                                                         <tr role="row">
                                                             <th>Product</th>
@@ -103,81 +97,7 @@
                                                             <th>Action</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody id="productBody">
-                                                        @foreach ($editData->saleItems as $item)
-                                                            <tr data-id={{ $item->id }}>
-
-                                                                <td class="d-flex align-items-center gap-2">
-                                                                    <input type="text" class="form-control"
-                                                                        value="{{ $item->product->code }} - {{ $item->product->name }}"
-                                                                        readonly style="max-width: 300px">
-                                                                    <button type="button"
-                                                                        class="btn btn-primary btn-sm edit-discount-btn"
-                                                                        data-id="{{ $item->id }}"
-                                                                        data-name="{{ $item->product->name }}"
-                                                                        data-cost="{{ $item->net_unit_cost }}"
-                                                                        data-bs-toggle="modal"
-                                                                        data-bs-target="#discountModal">
-                                                                        <span class="mdi mdi-book-edit "></span>
-                                                                    </button>
-                                                                </td>
-
-                                                                <td>
-                                                                    <input type="number"
-                                                                        name="products[{{ $item->product->id }}][net_unit_cost]"
-                                                                        class="form-control net-cost"
-                                                                        value="{{ $item->net_unit_cost }}"
-                                                                        style="max-width: 90px;" readonly>
-
-                                                                </td>
-                                                                <td>
-                                                                    <input type="number"
-                                                                        name="products[{{ $item->product->id }}][stock]"
-                                                                        class="form-control"
-                                                                        value="{{ $item->product->product_qty }}"
-                                                                        style="max-width: 80px;" readonly>
-                                                                </td>
-
-                                                                <td>
-                                                                    <div class="input-group">
-                                                                        <button
-                                                                            class="btn btn-outline-secondary decrement-qty"
-                                                                            type="button">−</button>
-                                                                        <input type="text"
-                                                                            class="form-control text-center qty-input"
-                                                                            name="products[{{ $item->product->id }}][quantity]"
-                                                                            value="{{ $item->quantity }}" min="1"
-                                                                            max="{{ $item->stock }}"
-                                                                            data-cost="{{ $item->net_unit_cost }}"
-                                                                            style="max-width: 50px;">
-                                                                        <button
-                                                                            class="btn btn-outline-secondary increment-qty"
-                                                                            type="button">+</button>
-                                                                    </div>
-                                                                </td>
-
-                                                                <td>
-                                                                    <input type="number"
-                                                                        class="form-control discount-input"
-                                                                        name="products[{{ $item->product->id }}][discount]"
-                                                                        value="{{ $item->discount }}"
-                                                                        style="max-width: 100px;">
-                                                                </td>
-
-                                                                <td class="subtotal">
-                                                                    {{ number_format($item->subtotal, 2) }}</td>
-                                                                <input type="hidden"
-                                                                    name="products[{{ $item->product->id }}][subtotal]"
-                                                                    value="{{ $item->subtotal }}">
-
-                                                                <td><button type="button"
-                                                                        class="btn btn-danger btn-sm remove-item"
-                                                                        data-id="{{ $item->id }}"><span
-                                                                            class="mdi mdi-delete-circle mdi-18px"></span></button>
-                                                                </td>
-
-                                                            </tr>
-                                                        @endforeach
+                                                    <tbody>
 
                                                     </tbody>
                                                 </table>
@@ -193,25 +113,18 @@
                                                                 <tbody>
                                                                     <tr>
                                                                         <td class="py-3">Discount</td>
-                                                                        <td class="py-3" id="displayDiscount">₹
-                                                                            {{ $editData->discount }}</td>
+                                                                        <td class="py-3" id="displayDiscount">₹ 0.00</td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td class="py-3">Shipping</td>
-                                                                        <td class="py-3" id="shippingDisplay">₹
-                                                                            {{ $editData->shipping }}</td>
+                                                                        <td class="py-3" id="shippingDisplay">₹ 0.00</td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td class="py-3 text-primary">Grand Total</td>
-                                                                        <td class="py-3 text-primary">
-                                                                            <span id="grandTotal">₹
-                                                                                {{ number_format($editData->grand_total, 2) }}</span>
-                                                                            <input type="hidden" name="grand_total"
-                                                                                id="grand_total_input"
-                                                                                value="{{ $editData->grand_total }}">
-                                                                        </td>
+                                                                        <td class="py-3 text-primary" id="grandTotal">₹
+                                                                            0.00</td>
+                                                                        <input type="hidden" name="grand_total">
                                                                     </tr>
-
 
 
                                                                     <tr>
@@ -219,8 +132,7 @@
                                                                         <td class="py-3" id="paidAmount">
                                                                             <input type="text" name="paid_amount"
                                                                                 placeholder="Enter amount paid"
-                                                                                class="form-control"
-                                                                                value="{{ $editData->paid_amount }}">
+                                                                                class="form-control">
                                                                         </td>
                                                                     </tr>
                                                                     <!-- new add full paid functionality  -->
@@ -233,13 +145,9 @@
                                                                     </tr>
                                                                     <tr>
                                                                         <td class="py-3">Due Amount</td>
-                                                                        <td class="py-3" id="dueAmount">₹
-                                                                            {{ $editData->due_amount }}</td>
-                                                                        <input type="hidden" name="due_amount"
-                                                                            id="due_amount"
-                                                                            value="{{ $editData->due_amount }}">
+                                                                        <td class="py-3" id="dueAmount">₹ 0.00</td>
+                                                                        <input type="hidden" name="due_amount">
                                                                     </tr>
-
 
 
                                                                 </tbody>
@@ -255,12 +163,12 @@
                                             <div class="col-md-4">
                                                 <label class="form-label">Discount: </label>
                                                 <input type="number" id="inputDiscount" name="discount"
-                                                    class="form-control" value="{{ $editData->discount }}">
+                                                    class="form-control" value="0.00">
                                             </div>
                                             <div class="col-md-4">
                                                 <label class="form-label">Shipping: </label>
                                                 <input type="number" id="inputShipping" name="shipping"
-                                                    class="form-control" value="{{ $editData->shipping }}">
+                                                    class="form-control" value="0.00">
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group w-100">
@@ -269,15 +177,9 @@
                                                     <select name="status" id="status"
                                                         class="form-control form-select">
                                                         <option value="">Select Status</option>
-                                                        <option value="Sale"
-                                                            {{ $editData->status == 'Sale' ? 'selected' : '' }}>Sale
-                                                        </option>
-                                                        <option value="Pending"
-                                                            {{ $editData->status == 'Pending' ? 'selected' : '' }}>Pending
-                                                        </option>
-                                                        <option value="Ordered"
-                                                            {{ $editData->status == 'Ordered' ? 'selected' : '' }}>Ordered
-                                                        </option>
+                                                        <option value="Return">Return</option>
+                                                        <option value="Pending">Pending</option>
+                                                        <option value="Ordered">Ordered</option>
                                                     </select>
                                                     @error('status')
                                                         <span class="text-danger">{{ $message }}</span>
@@ -288,7 +190,7 @@
 
                                         <div class="col-md-12 mt-2">
                                             <label class="form-label">Notes: </label>
-                                            <textarea class="form-control" name="note" rows="3" placeholder="Enter Notes">{{ $editData->note }}</textarea>
+                                            <textarea class="form-control" name="note" rows="3" placeholder="Enter Notes"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -296,10 +198,8 @@
 
                             <div class="col-xl-12">
                                 <div class="d-flex mt-5 justify-content-end">
-                                    <button class="btn btn-primary me-3" type="submit">
-                                        <span id="spinner" class="spinner-border spinner-border-sm me-2 d-none"
-                                            role="status" aria-hidden="true"></span>Update</button>
-                                    <a class="btn btn-secondary" href="{{ route('admin.all-purchase') }}">Cancel</a>
+                                    <button class="btn btn-primary me-3" type="submit">Save</button>
+                                    <a class="btn btn-secondary" href="#">Cancel</a>
                                 </div>
                             </div>
                     </div>
@@ -310,7 +210,6 @@
     </div>
     </div>
 @endsection
-
 @push('scripts')
-    @include('admin.sale.edit_sale_js')
+    @include('admin.sale.sale-return.create_sale_return_js');
 @endpush

@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\Admin\PurchaseController;
 use App\Http\Controllers\Admin\ReturnPurchaseController;
 use App\Http\Controllers\Admin\SaleController;
+use App\Http\Controllers\Admin\SaleReturnController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\WareHouseController;
 use App\Http\Controllers\ProfileController;
@@ -143,8 +144,18 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
         Route::get('sale-items-create', 'create')->name('sale.items-create');
         Route::post('sale-items-store', 'saleStore')->name('sales-store');
         Route::get('sale-items-edit/{id}', 'saleEdit')->name('sales-edit');
+        Route::put('sale-items-update/{id}', 'saleUpdate')->name('sales-update');
         Route::get('sale-details/{id}', 'saleDetails')->name('get.sale.details');
         Route::delete('sale-delete/{id}', 'saleDelete')->name('sale-delete');
-        
+        Route::get('sale/invoice/{id}', 'saleInvoice')->name('saleInvoice');
+    });
+
+    // Sale Return
+    Route::controller(SaleReturnController::class)->group(function () {
+        Route::get('sale-item-return', 'index')->name('sale-item.return');
+        Route::get('sale-return-create', 'create')->name('sale.return-create');
+        Route::post('sale-return-store', 'saleReturnStore')->name('sales-return-store');
+        Route::get('sale-return-details/{id}', 'saleReturnDetails')->name('get.sale-return.details');
+        Route::get('sale-return/invoice/{id}', 'saleReturnInvoice')->name('sale.return.Invoice');
     });
 });
