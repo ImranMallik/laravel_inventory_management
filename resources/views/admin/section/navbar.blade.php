@@ -162,6 +162,26 @@
                         </ul>
                     </div>
                 </li>
+                <li>
+                    <a href="#due" data-bs-toggle="collapse">
+                        <i data-feather="dollar-sign"></i>
+                        <span> Due Manage </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+
+                    <div class="collapse" id="due">
+                        <ul class="nav-second-level">
+                            <li>
+                                <a href="{{ route('admin.due.sale.index') }}" class="tp-link">Sales Due</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.due.sale.return.index') }}" class="tp-link">Sales Return
+                                    Due</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
 
 
                 <li>

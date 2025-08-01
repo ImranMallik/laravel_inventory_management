@@ -270,7 +270,7 @@
                                                         class="form-control form-select">
                                                         <option value="">Select Status</option>
                                                         <option value="Sale"
-                                                            {{ $editData->status == 'Sale' ? 'selected' : '' }}>Sale
+                                                            {{ $editData->status == 'Return' ? 'selected' : '' }}>Return
                                                         </option>
                                                         <option value="Pending"
                                                             {{ $editData->status == 'Pending' ? 'selected' : '' }}>Pending

@@ -160,5 +160,8 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
         Route::get('sale-return/edit/{id}', 'saleReturnEdit')->name('sale.return.edit');
         Route::put('sale-return/update/{id}', 'saleReturnUpdate')->name('sale.return.update');
         Route::delete('sale-return/delete/{id}', 'saleReturnDelete')->name('sale.return.delete');
+        // Due Sale
+        Route::get('due-sale-index', 'dueSaleIndex')->name('due.sale.index');
+        Route::get('due-sale-return-index', 'dueSaleReturnIndex')->name('due.sale.return.index');
     });
 });
