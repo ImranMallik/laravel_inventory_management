@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\ReturnPurchaseController;
 use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\SaleReturnController;
 use App\Http\Controllers\Admin\SupplierController;
+use App\Http\Controllers\Admin\TransferController;
 use App\Http\Controllers\Admin\WareHouseController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -163,5 +164,10 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
         // Due Sale
         Route::get('due-sale-index', 'dueSaleIndex')->name('due.sale.index');
         Route::get('due-sale-return-index', 'dueSaleReturnIndex')->name('due.sale.return.index');
+    });
+
+    // Manage Transfer
+    Route::controller(TransferController::class)->group(function () {
+        Route::get('all-transfer-item', 'index')->name('all-transfer.item');
     });
 });

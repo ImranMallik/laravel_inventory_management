@@ -181,6 +181,23 @@
                         </ul>
                     </div>
                 </li>
+                <li>
+                    <a href="#transfer" data-bs-toggle="collapse">
+                        <i data-feather="repeat"></i>
+
+                        <span> Transfers Setup </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+
+                    <div class="collapse" id="transfer">
+                        <ul class="nav-second-level">
+                            <li>
+                                <a href="{{ route('admin.all-transfer.item') }}" class="tp-link">Transfer</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
 
 
 
