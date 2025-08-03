@@ -169,5 +169,11 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
     // Manage Transfer
     Route::controller(TransferController::class)->group(function () {
         Route::get('all-transfer-item', 'index')->name('all-transfer.item');
+        Route::get('transfer-create', 'create')->name('transfer.create');
+        Route::post('transfer-store', 'transferStore')->name('transfer.store');
+        Route::get('transfer-details/{id}', 'transferDetails')->name('transfer.details');
+        Route::delete('transfer-delete/{id}', 'transferDelete')->name('transfer.delete');
+        Route::get('transfer-edit/{id}', 'transferEdit')->name('transfer.edit');
+        Route::put('transfer-update/{id}', 'transferUpdate')->name('transfer.update');
     });
 });

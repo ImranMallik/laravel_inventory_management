@@ -12,4 +12,8 @@ class TransferItem extends Model
     {
         return $this->belongsTo(Product::class, 'product_id');
     }
+     public function transfer()
+    {
+        return $this->belongsTo(Transfer::class, 'transfer_id');
+    }
 }
