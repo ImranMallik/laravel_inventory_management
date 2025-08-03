@@ -12,7 +12,7 @@
 
                 <div class="text-end">
                     <ol class="breadcrumb m-0 py-0">
-                        <a href="#" class="btn btn-secondary">Add Transfer</a>
+                        <a href="{{route('admin.transfer.create')}}" class="btn btn-secondary">+ Add Transfer</a>
                     </ol>
                 </div>
             </div>
@@ -44,8 +44,8 @@
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ \Carbon\Carbon::parse($item->date)->format('Y-m-d') }}</td>
-                                            <td>{{ $item['fromWarehouse']['name'] }}</td>
-                                            <td>{{ $item['toWarehouse']['name'] }}</td>
+                                            <td>{{ $item->formWarehouse->name }}</td>
+                                            <td>{{ $item->toWarehouse->name  }}</td>
                                             <td>
                                                 @foreach ($item->transferItems as $transferItem)
                                                     {{ $transferItem->product->name ?? 'N/A' }} <br>
@@ -59,14 +59,15 @@
                                             </td>
 
                                             <td>
-                                                <a title="Details" href="#" class="btn btn-info btn-sm"> <span
+                                                <a title="Details" href="{{route('admin.transfer.details',$item->id)}}" class="btn btn-info btn-sm"> <span
                                                         class="mdi mdi-eye-circle mdi-18px"></span> </a>
 
-                                                <a title="Edit" href="#" class="btn btn-success btn-sm"> <span
+                                                <a title="Edit" href="{{route('admin.transfer.edit', $item->id)}}" class="btn btn-success btn-sm"> <span
                                                         class="mdi mdi-book-edit mdi-18px"></span> </a>
 
-                                                <a title="Delete" href="#" class="btn btn-danger btn-sm"
-                                                    id="delete"><span class="mdi mdi-delete-circle  mdi-18px"></span></a>
+                                               <a title="Delete" href="{{ route('admin.transfer.delete', $item->id) }}"
+                                                    class="btn btn-danger btn-sm delete-item" id="delete"><span
+                                                        class="mdi mdi-delete-circle  mdi-18px"></span></a>
                                             </td>
                                         </tr>
                                     @endforeach
