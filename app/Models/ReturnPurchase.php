@@ -16,10 +16,6 @@ class ReturnPurchase extends Model
     {
         return $this->belongsTo(Supplier::class, 'supplier_id', 'id');
     }
-    public function purchaseItems()
-    {
-        return $this->hasMany(ReturnPurchaseItem::class, 'return_purchase_id', 'id');
-    }
     public function return_purchase_items()
     {
         return $this->hasMany(ReturnPurchaseItem::class, 'return_purchase_id', 'id');

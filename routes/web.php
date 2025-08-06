@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\Admin\PurchaseController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\ReturnPurchaseController;
 use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\SaleReturnController;
@@ -175,5 +176,13 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
         Route::delete('transfer-delete/{id}', 'transferDelete')->name('transfer.delete');
         Route::get('transfer-edit/{id}', 'transferEdit')->name('transfer.edit');
         Route::put('transfer-update/{id}', 'transferUpdate')->name('transfer.update');
+    });
+    // Report Controller
+    Route::controller(ReportController::class)->group(function () {
+        Route::get('all-report', 'index')->name('all-report');
+        Route::get('purchases/filter',  'filterPurchase')->name('purchases.filter');
+
+        // Purchase Return
+        Route::get('purchase-return/reports', 'purchaseReturn')->name('purchase-return.reports');
     });
 });
