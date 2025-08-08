@@ -132,8 +132,21 @@
                                     @endif
                                 </a>
                             </li>
-                            <li class="nav-item"><a href="#" class="nav-link">Sale</a></li>
-                            <li class="nav-item"><a href="#" class="nav-link">Sale Return</a></li>
+                            <li class="nav-item"><a href="{{route('admin.sale.report')}}" class="nav-link         {{Route::currentRouteName() === 'admin.sale.report' ? 'active' : '' }}">
+                                @if (Route::currentRouteName() === 'admin.sale.report')
+                                        <span class="badge bg-primary">Sale</span>
+                                    @else
+                                        Sale
+                                    @endif</a>
+                               </li>
+                            <li class="nav-item"><a href="{{route('admin.sale-return.reports')}}" class="nav-link         
+                                {{Route::currentRouteName() === 'admin.sale-return.reports' ? 'active' : '' }}">
+                                @if (Route::currentRouteName() === 'admin.sale-return.reports')
+                                        <span class="badge bg-primary">Sale Return</span>
+                                    @else
+                                        Sale Return
+                                    @endif</a>
+                               </li>
                             <li class="nav-item"><a href="#" class="nav-link">Stock</a></li>
                         </ul>
                     </div>

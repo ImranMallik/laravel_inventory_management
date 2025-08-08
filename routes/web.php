@@ -184,5 +184,13 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
 
         // Purchase Return
         Route::get('purchase-return/reports', 'purchaseReturn')->name('purchase-return.reports');
+        Route::get('purchases-return/filter',  'filterPurchaseReturn')->name('purchases-return.filter');
+
+        //Sale 
+        Route::get('sale/report', 'saleReport')->name('sale.report');
+        Route::get('sale/filter', 'filterSale')->name('sale.filter');
+        //Sale Return  
+        Route::get('sale-return/report', 'saleReturnReports')->name('sale-return.reports');
+        Route::get('sale-return/filter', 'saleReturnFilter')->name('sale-return.filter');
     });
 });
