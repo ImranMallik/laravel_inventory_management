@@ -131,14 +131,15 @@
                                     @endif
                                 </a>
                             </li>
-                            <li class="nav-item"><a href="{{route('admin.sale.report')}}" class="nav-link         {{Route::currentRouteName() === 'admin.sale.report' ? 'active' : '' }}">
+                            <li class="nav-item"><a href="{{route('admin.sale.report')}}" class="nav-link         
+                                {{Route::currentRouteName() === 'admin.sale.report' ? 'active' : '' }}">
                                 @if (Route::currentRouteName() === 'admin.sale.report')
                                         <span class="badge bg-primary">Sale</span>
                                     @else
                                         Sale
                                     @endif</a>
                                </li>
-                           <li class="nav-item"><a href="{{route('admin.sale-return.reports')}}" class="nav-link         
+                            <li class="nav-item"><a href="{{route('admin.sale-return.reports')}}" class="nav-link         
                                 {{Route::currentRouteName() === 'admin.sale-return.reports' ? 'active' : '' }}">
                                 @if (Route::currentRouteName() === 'admin.sale-return.reports')
                                         <span class="badge bg-primary">Sale Return</span>
@@ -184,7 +185,7 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Date</th>
-                                <th>Supplier</th>
+                                <th>Customer</th>
                                 <th>Warehouse</th>
                                 <th>Product</th>
                                 <th>Stock</th>
@@ -194,18 +195,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($returnPurchases as $key => $returnPurchase)
-                                @foreach ($returnPurchase->return_purchase_items as $item)
+                            @foreach ($returnSales as $key => $returnSale)
+                                @foreach ($returnSale->saleReturnItems as $item)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td>{{ $returnPurchase->date }}</td>
-                                        <td>{{ $returnPurchase->supplier->name ?? 'N/A' }}</td>
-                                        <td>{{ $returnPurchase->warehouse->name ?? 'N/A' }}</td>
+                                        <td>{{ $returnSale->date }}</td>
+                                        <td>{{ $returnSale->customer->name ?? 'N/A' }}</td>
+                                        <td>{{ $returnSale->warehouse->name ?? 'N/A' }}</td>
                                         <td>{{ $item->product->name ?? 'N/A' }}</td>
                                         <td>{{ $item->quantity ?? 'N/A' }}</td>
                                         <td>₹{{ $item->net_unit_cost ?? 'N/A' }}</td>
-                                        <td>{{ $returnPurchase->status ?? 'N/A' }}</td>
-                                        <td>₹{{ $returnPurchase->grand_total ?? 'N/A' }}</td>
+                                        <td>{{ $returnSale->status ?? 'N/A' }}</td>
+                                        <td>₹{{ $returnSale->grand_total ?? 'N/A' }}</td>
                                     </tr>
                                 @endforeach
                             @endforeach
@@ -218,12 +219,12 @@
 @endsection
 
 @push('scripts')
-    <script>
+  <script>
         function fetchFilteredData(filterType, startDate = null, endDate = null) {
 
 
             $.ajax({
-                url: '{{ route('admin.purchases-return.filter') }}',
+                url: '{{ route('admin.sale-return.filter') }}',
                 method: 'GET',
                 data: {
                     filter: filterType,
@@ -238,7 +239,7 @@
                         table.row.add([
                             index + 1,
                             row.date,
-                            row.supplier,
+                            row.customer,
                             row.warehouse,
                             row.product,
                             row.quantity,
