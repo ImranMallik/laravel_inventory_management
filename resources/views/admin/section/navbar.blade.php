@@ -215,6 +215,20 @@
                         </ul>
                     </div>
                 </li>
+                <li>
+                    <a href="#rolepermission" data-bs-toggle="collapse">
+                        <i data-feather="file-text"></i>
+                        <span> Role & Permission </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="rolepermission">
+                        <ul class="nav-second-level">
+                            <li>
+                                <a href="{{ route('admin.all.permission') }}" class="tp-link">All Permission</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
 
                 <li>
                     <a href="#sidebarError" data-bs-toggle="collapse">

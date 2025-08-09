@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\Admin\PurchaseController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\ReturnPurchaseController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\SaleReturnController;
 use App\Http\Controllers\Admin\SupplierController;
@@ -196,5 +197,11 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
         // Stock
         Route::get('stock/report', 'stockReport')->name('stock.reports');
         Route::get('stock/filter', 'filterStockReport')->name('stock.filter');
+    });
+    // Role Controller
+    Route::controller(RoleController::class)->group(function () {
+        Route::get('all/permission', 'allPermission')->name('all.permission');
+        Route::get('create/permission', 'permission')->name('create.permission');
+        Route::post('store/permission', 'storePermission')->name('store.permission');
     });
 });
