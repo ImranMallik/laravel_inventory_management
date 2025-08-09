@@ -3,27 +3,25 @@
     <div class="content">
         @include('admin.report.dashbodar-data.index')
 
+        <!-- Navigation and Filters -->
         <div class="card mt-4">
             @include('admin.report.dashbodar-data.table_hader')
 
+            <!-- DataTable -->
             <div class="card-body">
                 <div class="table-responsive">
-                    <table id="example" class="table table-striped table-bordered w-100">
+                    <table id="example" class="table table-striped table-bordered" style="width: 100%;">
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Date</th>
-                                <th>Customer</th>
+                                <th>Product Name</th>
+                                <th>Category</th>
                                 <th>Warehouse</th>
-                                <th>Product</th>
-                                <th>Qty</th>
-                                <th>Unit Price</th>
-                                <th>Status</th>
-                                <th>Grand Total</th>
+                                <th>Stock Quantity</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- Loaded via AJAX --}}
+                            {{-- Leave empty; will be filled via AJAX --}}
                         </tbody>
                     </table>
                 </div>
@@ -42,21 +40,11 @@
             el.classList.toggle('d-none', !show);
         }
 
-        function badge(status) {
-            if (!status) return '<span class="badge bg-secondary">N/A</span>';
-            const s = String(status).toLowerCase();
-            if (s.includes('paid')) return '<span class="badge bg-success">' + status + '</span>';
-            if (s.includes('pending')) return '<span class="badge bg-warning text-dark">' + status + '</span>';
-            if (s.includes('partial')) return '<span class="badge bg-info text-dark">' + status + '</span>';
-            if (s.includes('cancel')) return '<span class="badge bg-danger">' + status + '</span>';
-            return '<span class="badge bg-secondary">' + status + '</span>';
-        }
-
         function fetchFilteredData(filterType, startDate = null, endDate = null) {
             toggleLoader(true);
 
             $.ajax({
-                url: "{{ route('admin.sale-return.filter') }}",
+                url: "{{ route('admin.stock.filter') }}",
                 method: 'GET',
                 data: {
                     filter: filterType,
@@ -64,20 +52,11 @@
                     end_date: endDate
                 },
                 success: function(response) {
-                    const rows = Array.isArray(response.data) ? response.data.map((row, idx) => ([
-                        idx + 1,
-                        row.date ?? 'N/A',
-                        row.customer ?? 'N/A',
-                        row.warehouse ?? 'N/A',
-                        row.product ?? 'N/A',
-                        row.quantity ?? 0,
-                        row.net_unit_cost ?? '₹0.00',
-                        row.status ? badge(row.status) : badge(null),
-                        row.grand_total ?? '₹0.00'
-                    ])) : [];
 
                     table.clear();
-                    table.rows.add(rows);
+                    if (Array.isArray(response.data)) {
+                        table.rows.add(response.data);
+                    }
                     table.draw();
                 },
                 error: function() {
@@ -92,48 +71,34 @@
         $(document).ready(function() {
             table = $('#example').DataTable({
                 columns: [{
-                        title: "ID",
-                        className: "text-center"
+                        title: "ID"
                     },
                     {
-                        title: "Date"
+                        title: "Product Name"
                     },
                     {
-                        title: "Customer"
+                        title: "Category"
                     },
                     {
                         title: "Warehouse"
                     },
                     {
-                        title: "Product"
-                    },
-                    {
-                        title: "Qty",
-                        className: "text-center"
-                    },
-                    {
-                        title: "Unit Price",
-                        className: "text-end"
-                    },
-                    {
-                        title: "Status"
-                    },
-                    {
-                        title: "Grand Total",
+                        title: "Stock Quantity",
                         className: "text-end"
                     }
                 ],
                 pageLength: 25,
-                order: [
-                    [1, 'desc']
-                ]
+                order: []
             });
 
+            // First load
             const defaultFilter = $('#date-range').val();
             fetchFilteredData(defaultFilter);
 
+            // Range dropdown behavior
             $('#date-range').on('change', function() {
                 const value = $(this).val();
+
                 if (value === 'custom') {
                     $('#custom-date-range').removeClass('d-none');
                 } else {
@@ -142,6 +107,7 @@
                 }
             });
 
+            // Custom range search
             $('#search-date-range').on('click', function() {
                 const startDate = $('#start-date').val();
                 const endDate = $('#end-date').val();

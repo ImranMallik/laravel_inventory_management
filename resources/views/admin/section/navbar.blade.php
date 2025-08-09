@@ -203,8 +203,7 @@
 
                 <li>
                     <a href="#report" data-bs-toggle="collapse">
-                        <i data-feather="repeat"></i>
-
+                        <i data-feather="file-text"></i>
                         <span> Report Setup </span>
                         <span class="menu-arrow"></span>
                     </a>
@@ -213,12 +212,9 @@
                             <li>
                                 <a href="{{ route('admin.all-report') }}" class="tp-link">All Reports</a>
                             </li>
-
                         </ul>
                     </div>
                 </li>
-
-
 
                 <li>
                     <a href="#sidebarError" data-bs-toggle="collapse">
