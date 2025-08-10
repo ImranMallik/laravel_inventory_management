@@ -203,5 +203,8 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
         Route::get('all/permission', 'allPermission')->name('all.permission');
         Route::get('create/permission', 'permission')->name('create.permission');
         Route::post('store/permission', 'storePermission')->name('store.permission');
+        Route::delete('delete/permission/{id}', 'deletePermission')->name('delete.permission');
+        Route::get('edit/permission/{id}', 'editPermission')->name('edit.permission');
+        Route::put('update/permission/{id}', 'updatePermission')->name('update.permission');
     });
 });

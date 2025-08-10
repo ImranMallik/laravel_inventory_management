@@ -45,11 +45,11 @@
                                              <td>{{ $item->group_name }}</td>
                                              <td>
 
-                                                 <a href="{{ route('admin.ware-house.edit', $item->id) }}"
+                                                 <a href="{{ route('admin.edit.permission', $item->id) }}"
                                                      class="btn btn-success btn-sm">Edit</a>
 
 
-                                                 <a href="{{ route('admin.ware-house.delete', $item->id) }}"
+                                                 <a href="{{ route('admin.delete.permission', $item->id) }}"
                                                      class="btn btn-danger btn-sm delete-item" id="delete">Delete</a>
                                              </td>
                                          </tr>

@@ -65,4 +65,69 @@ class RoleController extends Controller
                 ->withErrors(['name' => 'Failed to create permission.']);
         }
     }
+    public function deletePermission($id){
+        $permission= Permission::findOrFail($id);
+        $permission->delete();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'permission deleted successfully'
+        ]);
+    }
+
+   public function editPermission($id)
+    {
+        
+        $permission = Permission::findOrFail($id);
+
+    
+        return view('admin.role_permission.permission.edit', compact('permission'));
+    }
+
+   public function updatePermission(Request $request, $id)
+{
+    $data = $request->only(['name', 'group_name']);
+    $data['name'] = trim(preg_replace('/\s+/', ' ', $data['name'] ?? ''));
+    $data['group_name'] = trim($data['group_name'] ?? '');
+
+    // Validate input
+    $request->validate([
+        'name' => [
+            'required',
+            'string',
+            'max:191',
+            Rule::unique('permissions', 'name')->ignore($id), // Ignore current record when checking uniqueness
+        ],
+        'group_name' => ['required', 'string', 'max:191'],
+    ]);
+
+    try {
+        // Find the existing permission
+        $permission = Permission::findOrFail($id);
+
+        // Update the record
+        $permission->update([
+            'name'       => $data['name'],
+            'group_name' => $data['group_name'],
+            'guard_name' => $permission->guard_name ?? 'web', // Keep existing guard_name
+        ]);
+
+        // Clear Spatie permission cache
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
+
+        return redirect()
+            ->route('admin.all.permission')
+            ->with([
+                'message' => 'Permission updated successfully.',
+                'alert-type' => 'success',
+            ]);
+    } catch (\Throwable $e) {
+        report($e);
+
+        return back()
+            ->withInput()
+            ->withErrors(['name' => 'Failed to update permission.']);
+    }
+}
+
+
 }
