@@ -217,7 +217,7 @@
                 </li>
                 <li>
                     <a href="#rolepermission" data-bs-toggle="collapse">
-                        <i data-feather="file-text"></i>
+                        <i data-feather="key"></i>
                         <span> Role & Permission </span>
                         <span class="menu-arrow"></span>
                     </a>
@@ -225,6 +225,11 @@
                         <ul class="nav-second-level">
                             <li>
                                 <a href="{{ route('admin.all.permission') }}" class="tp-link">All Permission</a>
+                            </li>
+                        </ul>
+                        <ul class="nav-second-level">
+                            <li>
+                                <a href="{{ route('admin.all.userRole') }}" class="tp-link">All Role</a>
                             </li>
                         </ul>
                     </div>

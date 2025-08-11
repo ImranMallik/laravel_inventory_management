@@ -206,5 +206,7 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
         Route::delete('delete/permission/{id}', 'deletePermission')->name('delete.permission');
         Route::get('edit/permission/{id}', 'editPermission')->name('edit.permission');
         Route::put('update/permission/{id}', 'updatePermission')->name('update.permission');
+        // User Role
+        Route::get('user/role', 'getAllrole')->name('all.userRole');
     });
 });
