@@ -208,5 +208,9 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
         Route::put('update/permission/{id}', 'updatePermission')->name('update.permission');
         // User Role
         Route::get('user/role', 'getAllrole')->name('all.userRole');
+        Route::post('user/role-store', 'storeRoll')->name('store.userRole');
+        Route::delete('user/role-delete/{id}', 'deleteRole')->name('delete.userRole');
+        Route::put('user/role-update/{id}', 'updateRole')->name('update.userRole');
+        
     });
 });
