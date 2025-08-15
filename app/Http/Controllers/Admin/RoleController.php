@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\PermissionRegistrar;
 
 class RoleController extends Controller
@@ -135,4 +136,77 @@ class RoleController extends Controller
         $roles = Role::all();
         return view('admin.role_permission.role.index', compact('roles'));
     }
+
+    public function storeRoll(Request $request)
+    {
+    try {
+        // Validate request
+        $validator = Validator::make($request->all(), [
+            'roleName' => 'required|string|max:255|unique:roles,name',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors'  => $validator->errors()
+            ], 422);
+        }
+
+        // Create role
+        $role = Role::create(['name' => $request->roleName]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Role created successfully.',
+            'data'    => $role
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Error: ' . $e->getMessage()
+        ], 500);
+    }
+}
+public function deleteRole($id){
+    $userRole=Role::findOrFail($id);
+    $userRole->delete();
+     return response()->json([
+            'status' => 'success',
+            'message' => 'Role deleted successfully'
+     ]);
+}
+
+public function updateRole(Request $request, $id)
+{
+    // dd($request->all());
+    try {
+       
+        $validator = Validator::make($request->all(), [
+            'roleName' => 'required|string|max:255|unique:roles,name,' . $id,
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors'  => $validator->errors()
+            ], 422);
+        }
+
+     
+        $role = Role::findOrFail($id);
+        $role->name = $request->roleName;
+        $role->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Role updated successfully.',
+            'data'    => $role
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Error: ' . $e->getMessage()
+        ], 500);
+    }
+ }
 }
