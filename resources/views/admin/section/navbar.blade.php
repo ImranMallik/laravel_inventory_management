@@ -232,6 +232,12 @@
                                 <a href="{{ route('admin.all.userRole') }}" class="tp-link">All Role</a>
                             </li>
                         </ul>
+                        <ul class="nav-second-level">
+                            <li>
+                                <a href="{{ route('admin.addrole.inpermission') }}" class="tp-link">Role In
+                                    Permission</a>
+                            </li>
+                        </ul>
                     </div>
                 </li>
 

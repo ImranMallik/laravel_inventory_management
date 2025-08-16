@@ -211,6 +211,10 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
         Route::post('user/role-store', 'storeRoll')->name('store.userRole');
         Route::delete('user/role-delete/{id}', 'deleteRole')->name('delete.userRole');
         Route::put('user/role-update/{id}', 'updateRole')->name('update.userRole');
-        
+
+        // Add Role In Permission
+        Route::get('user/role-in-permission', 'addRoleInPermission')->name('addrole.inpermission');
+        //Store Role In Permission
+        Route::post('user/add-role-in-permission', 'storeRoleInPermission')->name('store.roleInPermission');
     });
 });

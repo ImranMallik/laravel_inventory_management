@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Validation\Rule;
@@ -139,74 +141,101 @@ class RoleController extends Controller
 
     public function storeRoll(Request $request)
     {
-    try {
-        // Validate request
-        $validator = Validator::make($request->all(), [
-            'roleName' => 'required|string|max:255|unique:roles,name',
-        ]);
+        try {
+            // Validate request
+            $validator = Validator::make($request->all(), [
+                'roleName' => 'required|string|max:255|unique:roles,name',
+            ]);
 
-        if ($validator->fails()) {
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'errors'  => $validator->errors()
+                ], 422);
+            }
+
+            // Create role
+            $role = Role::create(['name' => $request->roleName]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Role created successfully.',
+                'data'    => $role
+            ]);
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'errors'  => $validator->errors()
-            ], 422);
+                'message' => 'Error: ' . $e->getMessage()
+            ], 500);
         }
-
-        // Create role
-        $role = Role::create(['name' => $request->roleName]);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Role created successfully.',
-            'data'    => $role
-        ]);
-    } catch (\Exception $e) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Error: ' . $e->getMessage()
-        ], 500);
     }
-}
-public function deleteRole($id){
-    $userRole=Role::findOrFail($id);
-    $userRole->delete();
-     return response()->json([
+    public function deleteRole($id)
+    {
+        $userRole = Role::findOrFail($id);
+        $userRole->delete();
+        return response()->json([
             'status' => 'success',
             'message' => 'Role deleted successfully'
-     ]);
-}
-
-public function updateRole(Request $request, $id)
-{
-    // dd($request->all());
-    try {
-       
-        $validator = Validator::make($request->all(), [
-            'roleName' => 'required|string|max:255|unique:roles,name,' . $id,
         ]);
+    }
 
-        if ($validator->fails()) {
+    public function updateRole(Request $request, $id)
+    {
+        // dd($request->all());
+        try {
+
+            $validator = Validator::make($request->all(), [
+                'roleName' => 'required|string|max:255|unique:roles,name,' . $id,
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'errors'  => $validator->errors()
+                ], 422);
+            }
+
+
+            $role = Role::findOrFail($id);
+            $role->name = $request->roleName;
+            $role->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Role updated successfully.',
+                'data'    => $role
+            ]);
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'errors'  => $validator->errors()
-            ], 422);
+                'message' => 'Error: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    //  
+    function addRoleInPermission()
+    {
+        $roles = Role::all();
+        $permission = Permission::all();
+        $permissionGroups = User::getpermissionGroups();
+        return view('admin.role_permission.role_in_permission.index', compact(
+            'roles',
+            'permission',
+            'permissionGroups'
+        ));
+    }
+    // Store ROle In Permission
+    function storeRoleInPermission(Request $request)
+    {
+        $data = array();
+        $permissions = $request->permission;
+
+        foreach ($permissions as $key => $item) {
+            $data['role_id'] = $request->role_id;
+            $data['permission_id'] = $item;
         }
 
-     
-        $role = Role::findOrFail($id);
-        $role->name = $request->roleName;
-        $role->save();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Role updated successfully.',
-            'data'    => $role
-        ]);
-    } catch (\Exception $e) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Error: ' . $e->getMessage()
-        ], 500);
+        DB::table('role_has_permissions')->insert($data);
     }
- }
 }
