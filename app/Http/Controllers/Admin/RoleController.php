@@ -228,15 +228,34 @@ class RoleController extends Controller
     // Store ROle In Permission
     function storeRoleInPermission(Request $request)
     {
-        dd($request->all());
-        // $data = array();
-        // $permissions = $request->permission;
+        // dd($request->all());
 
-        // foreach ($permissions as $key => $item) {
-        //     $data['role_id'] = $request->role_id;
-        //     $data['permission_id'] = $item;
-        // }
+        $request->validate([
+            'role_id' => 'required|exists:roles,id',
+            'permission' => 'required|array|min:1',
+            'permission.*' => 'exists:permissions,id',
+        ]);
+        DB::table('role_has_permissions')->where('role_id', $request->role_id)->delete();
 
-        // DB::table('role_has_permissions')->insert($data);
+        $data = [];
+
+        foreach ($request->permission as $permissionId) {
+            $data[] = [
+                'role_id' => $request->role_id,
+                'permission_id' => $permissionId,
+            ];
+        }
+
+
+        DB::table('role_has_permissions')->insert($data);
+
+        return response()->json(['message' => 'Permissions assigned successfully.']);
+    }
+
+    function listAllRoleInPermission()
+    {
+        $roles = Role::with('permissions')->get();
+
+        return view('admin.role_permission.role_in_permission.list', compact('roles'));
     }
 }

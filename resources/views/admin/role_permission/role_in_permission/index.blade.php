@@ -83,14 +83,15 @@
                                              @endforeach
                                          </div>
                                      </div>
+                                     <hr class="my-3" />
                                  @endforeach
 
                                  <div class="col-12">
                                      <button class="btn btn-primary" type="submit" id="saveButton">
-                                            <span id="spinner" class="spinner-border spinner-border-sm me-2 d-none" role="status"
-                                                aria-hidden="true"></span>
-                                            Save Change
-                                        </button>
+                                         <span id="spinner" class="spinner-border spinner-border-sm me-2 d-none"
+                                             role="status" aria-hidden="true"></span>
+                                         Save Change
+                                     </button>
                                  </div>
                              </form>
 
@@ -105,72 +106,73 @@
      </div>
  @endsection
 
-@push('scripts')
-<script>
-    $(document).ready(function () {
-
- 
-        $("#permissionall").on('change', function () {
-            $('input[type="checkbox"]').not(this).prop('checked', this.checked);
-        });
-
-        // Form submit 
-        $('#submitRoleInPermission').on('submit', function (e) {
-            e.preventDefault();
-
-            let role_id = $('#role_id').val();
-            let checkedPermissions = $("input[name='permission[]']:checked").length;
-
-          
-            if (role_id === "" || role_id == null) {
-                toastr.error("Please select a role.");
-                return false;
-            }
-
-            if (checkedPermissions === 0) {
-                toastr.error("Please select at least one permission.");
-                return false;
-            }
-
-            
-        $('#spinner').removeClass('d-none');
-        $('#saveButton').attr('disabled', true);
-           
-           let formData = new FormData(this);
-
-            $.ajax({
-                url: "{{ route('admin.store.roleInPermission') }}",
-                type: "POST",
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                    toastr.success(response.message);
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1500);
-                },
-                error: function (xhr) {
-                    let errors = xhr.responseJSON?.errors;
-                    if (errors) {
-                        $.each(errors, function (key, value) {
-                            toastr.error(value[0]);
-                        });
-                    } else {
-                        toastr.error("An unexpected error occurred.");
-                    }
-                },
-                 complete: function () {
-                $('#spinner').addClass('d-none');
-                $('#saveButton').removeAttr('disabled');
-            }
-            });
+ @push('scripts')
+     <script>
+         $(document).ready(function() {
 
 
+             $("#permissionall").on('change', function() {
+                 $('input[type="checkbox"]').not(this).prop('checked', this.checked);
+             });
+
+             // Form submit 
+             $('#submitRoleInPermission').on('submit', function(e) {
+                 e.preventDefault();
+
+                 let role_id = $('#role_id').val();
+                 let checkedPermissions = $("input[name='permission[]']:checked").length;
 
 
-        });
-    });
-</script>
-@endpush
+                 if (role_id === "" || role_id == null) {
+                     toastr.error("Please select a role.");
+                     return false;
+                 }
 
+                 if (checkedPermissions === 0) {
+                     toastr.error("Please select at least one permission.");
+                     return false;
+                 }
+
+
+                 $('#spinner').removeClass('d-none');
+                 $('#saveButton').attr('disabled', true);
+
+                 let formData = new FormData(this);
+
+                 $.ajax({
+                     url: "{{ route('admin.store.roleInPermission') }}",
+                     type: "POST",
+                     data: formData,
+                     contentType: false,
+                     processData: false,
+                     success: function(response) {
+                         toastr.success(response.message);
+                         setTimeout(() => {
+                             window.location.reload();
+                         }, 1500);
+                     },
+                     error: function(xhr) {
+                         let errors = xhr.responseJSON?.errors;
+                         if (errors) {
+                             $.each(errors, function(key, value) {
+                                 toastr.error(value[0]);
+                             });
+                         } else {
+                             toastr.error("An unexpected error occurred.");
+                         }
+                     },
+                     complete: function() {
+                         $('#spinner').addClass('d-none');
+                         $('#saveButton').removeAttr('disabled');
+                     }
+
+
+                 });
+
+
+
+
+             });
+         });
+     </script>
+ @endpush

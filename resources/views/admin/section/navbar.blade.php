@@ -238,6 +238,12 @@
                                     Permission</a>
                             </li>
                         </ul>
+                        <ul class="nav-second-level">
+                            <li>
+                                <a href="{{ route('admin.list.allrollinpermission') }}" class="tp-link">All Role In
+                                    Permission</a>
+                            </li>
+                        </ul>
                     </div>
                 </li>
 

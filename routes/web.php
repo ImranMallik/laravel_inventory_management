@@ -216,5 +216,8 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
         Route::get('user/role-in-permission', 'addRoleInPermission')->name('addrole.inpermission');
         //Store Role In Permission
         Route::post('user/add-role-in-permission', 'storeRoleInPermission')->name('store.roleInPermission');
+
+        // List Role In permission
+        Route::get('user/list-all-role-in-permission', 'listAllRoleInPermission')->name('list.allrollinpermission');
     });
 });
