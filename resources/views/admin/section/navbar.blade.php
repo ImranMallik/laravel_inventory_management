@@ -246,6 +246,20 @@
                         </ul>
                     </div>
                 </li>
+                <li>
+                    <a href="#manageadmin" data-bs-toggle="collapse">
+                        <i data-feather="users"></i>
+                        <span> Manage Admin </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="manageadmin">
+                        <ul class="nav-second-level">
+                            <li>
+                                <a href="{{ route('admin.list.all.user') }}" class="tp-link">All Admin</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
 
                 <li>
                     <a href="#sidebarError" data-bs-toggle="collapse">

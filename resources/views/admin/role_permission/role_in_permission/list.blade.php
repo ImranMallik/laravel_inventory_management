@@ -52,11 +52,12 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <button type="button" class="btn btn-success btn-sm edit-btn"
-                                                    data-id="{{ $item->id }}" data-name="{{ $item->name }}">
+                                                <a href="{{ route('admin.edit.roleinpermission', $item->id) }}"
+                                                    class="btn btn-success btn-sm edit-btn">
                                                     Edit
-                                                </button>
-                                                <a href="{{route('admin.delete.rollinpermission',$item->id)}}" class="btn btn-danger btn-sm delete-item">Delete</a>
+                                                </a>
+                                                <a href="{{ route('admin.delete.rollinpermission', $item->id) }}"
+                                                    class="btn btn-danger btn-sm delete-item">Delete</a>
                                             </td>
                                         </tr>
                                     @endforeach

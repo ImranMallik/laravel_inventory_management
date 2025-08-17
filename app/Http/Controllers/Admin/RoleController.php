@@ -259,19 +259,52 @@ class RoleController extends Controller
         return view('admin.role_permission.role_in_permission.list', compact('roles'));
     }
 
-  
+    function editRoleInPermission($id)
+    {
+        $role = Role::findOrFail($id);
+        $permissionGroups = User::getPermissionGroups();
+        $rolePermissions = $role->permissions()->pluck('id')->toArray();
+
+        return view('admin.role_permission.role_in_permission.edit', compact('role', 'permissionGroups', 'rolePermissions'));
+    }
+
+
+    public function updateRoleInPermission(Request $request, $id)
+    {
+        $request->validate([
+            'permission' => 'required|array',
+        ]);
+
+        $role = Role::findOrFail($id);
+
+        $permissions = Permission::whereIn('id', $request->permission)->pluck('name')->toArray();
+
+        $role->syncPermissions($permissions);
+
+        return response()->json(['message' => 'Permissions updated successfully.']);
+    }
+
+
 
     public function deleteRoleInPermission($id)
-{
-    // Delete all permissions linked to this role
-    DB::table('role_has_permissions')->where('role_id', $id)->delete();
+    {
+        DB::table('role_has_permissions')->where('role_id', $id)->delete();
 
-    return response()->json([
-        'status' => 'success',
-        'message' => 'All permissions removed from this role successfully!'
-    ]);
-}
+        return response()->json([
+            'status' => 'success',
+            'message' => 'All permissions removed from this role successfully!'
+        ]);
+    }
 
+    function listAllUser()
+    {
+        $alladmin = User::where('role', 'admin')->latest()->get();
+        return view('admin.role_permission.admin.index', compact('alladmin'));
+    }
 
-
+    function createAllUser()
+    {
+        $roles = Role::all();
+        return view('admin.role_permission.admin.create', compact('roles'));
+    }
 }
