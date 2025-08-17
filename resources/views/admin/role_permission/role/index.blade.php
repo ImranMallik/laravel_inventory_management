@@ -103,7 +103,7 @@ $(document).ready(function () {
         $('#role-modal').modal('show');
     });
 
-    // Submit Form (Insert or Update)
+   
     $('#roleForm').on('submit', function (e) {
         e.preventDefault();
 
