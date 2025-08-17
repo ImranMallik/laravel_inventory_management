@@ -56,7 +56,7 @@
                                                     data-id="{{ $item->id }}" data-name="{{ $item->name }}">
                                                     Edit
                                                 </button>
-                                                <a href="#" class="btn btn-danger btn-sm delete-item">Delete</a>
+                                                <a href="{{route('admin.delete.rollinpermission',$item->id)}}" class="btn btn-danger btn-sm delete-item">Delete</a>
                                             </td>
                                         </tr>
                                     @endforeach

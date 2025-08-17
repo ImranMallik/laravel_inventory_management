@@ -258,4 +258,20 @@ class RoleController extends Controller
 
         return view('admin.role_permission.role_in_permission.list', compact('roles'));
     }
+
+  
+
+    public function deleteRoleInPermission($id)
+{
+    // Delete all permissions linked to this role
+    DB::table('role_has_permissions')->where('role_id', $id)->delete();
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'All permissions removed from this role successfully!'
+    ]);
+}
+
+
+
 }

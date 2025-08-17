@@ -219,5 +219,7 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
 
         // List Role In permission
         Route::get('user/list-all-role-in-permission', 'listAllRoleInPermission')->name('list.allrollinpermission');
+        Route::delete('user/role-in-permission/delete/{id}', 'deleteRoleInPermission')->name('delete.rollinpermission');
+
     });
 });
