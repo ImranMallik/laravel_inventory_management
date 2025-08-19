@@ -226,5 +226,10 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'verified'])->group(fu
         // Admin User
         Route::get('all/admin/user', 'listAllUser')->name('list.all.user');
         Route::get('add/user/create', 'createAllUser')->name('create.all.user');
+        Route::post('add/user/store', 'storeUser')->name('store.user');
+        Route::delete('add/user/delete/{id}', 'deleteUser')->name('delete.user');
+        Route::get('add/user/edit/{id}', 'editUser')->name('edit.user');
+        Route::put('add/user/update/{id}', 'updateUser')->name('update.user');
+
     });
 });
