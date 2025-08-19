@@ -33,40 +33,45 @@
                 </li>
 
                 <li class="menu-title">Pages</li>
+                @if (Auth::guard('web')->user()->can('brand.manage'))
+                    <li>
+                        <a href="#brandManage" data-bs-toggle="collapse">
+                            <i data-feather="briefcase"></i>
 
-                <li>
-                    <a href="#brandManage" data-bs-toggle="collapse">
-                        <i data-feather="briefcase"></i>
+                            <span> Brand Manage </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="brandManage">
+                            <ul class="nav-second-level">
+                                @if (Auth::guard('web')->user()->can('all.brand'))
+                                    <li>
+                                        <a href="{{ route('admin.brand.all') }}" class="tp-link">All Brand</a>
+                                    </li>
+                                @endif
 
-                        <span> Brand Manage </span>
-                        <span class="menu-arrow"></span>
-                    </a>
-                    <div class="collapse" id="brandManage">
-                        <ul class="nav-second-level">
-                            <li>
-                                <a href="{{ route('admin.brand.all') }}" class="tp-link">All Brand</a>
-                            </li>
+                            </ul>
+                        </div>
+                    </li>
+                @endif
 
-                        </ul>
-                    </div>
-                </li>
+                @if (Auth::guard('web')->user()->can('warehouse.menu'))
+                    <li>
+                        <a href="#warehouseManage" data-bs-toggle="collapse">
+                            <i data-feather="home"></i>
 
-                <li>
-                    <a href="#warehouseManage" data-bs-toggle="collapse">
-                        <i data-feather="home"></i>
+                            <span> Manage Ware House </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="warehouseManage">
+                            <ul class="nav-second-level">
+                                <li>
+                                    <a href="{{ route('admin.ware-house.all') }}" class="tp-link">All Warehouse</a>
+                                </li>
 
-                        <span> Manage Ware House </span>
-                        <span class="menu-arrow"></span>
-                    </a>
-                    <div class="collapse" id="warehouseManage">
-                        <ul class="nav-second-level">
-                            <li>
-                                <a href="{{ route('admin.ware-house.all') }}" class="tp-link">All Warehouse</a>
-                            </li>
-
-                        </ul>
-                    </div>
-                </li>
+                            </ul>
+                        </div>
+                    </li>
+                @endif
                 <li>
                     <a href="#supplierManage" data-bs-toggle="collapse">
                         <i data-feather="box"></i>

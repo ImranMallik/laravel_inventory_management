@@ -312,136 +312,131 @@ class RoleController extends Controller
     public function storeUser(Request $request)
     {
         try {
-    $validated = $request->validate([
-        'name'     => 'required|string|max:255',
-        'email'    => 'required|email|unique:users,email',
-        'password' => 'required|string|min:6',
-        'roles'    => 'required|exists:roles,id',
-    ]);
+            $validated = $request->validate([
+                'name'     => 'required|string|max:255',
+                'email'    => 'required|email|unique:users,email',
+                'password' => 'required|string|min:6',
+                'roles'    => 'required|exists:roles,id',
+            ]);
 
-    DB::beginTransaction();
+            DB::beginTransaction();
 
-    // Get the selected role object
-    $role = Role::where('id', $validated['roles'])
-                ->where('guard_name', 'web') // adjust if needed
+            $role = Role::where('id', $validated['roles'])
+                ->where('guard_name', 'web')
                 ->first();
 
-    if (!$role) {
-        throw new \Exception("Invalid role selected.");
-    }
+            if (!$role) {
+                throw new \Exception("Invalid role selected.");
+            }
 
-    // Create user and dynamically set the 'role' column
-    $user = new User();
-    $user->name     = $validated['name'];
-    $user->email    = $validated['email'];
-    $user->password = Hash::make($validated['password']);
-    $user->role     = $role->name; // 👈 dynamic role name from DB (e.g., 'superadmin', 'manager')
-    $user->save();
-
-    // Assign Spatie role
-    $user->assignRole($role->name);
-
-    DB::commit();
-
-    return response()->json([
-        'status'  => true,
-        'message' => 'User created successfully!',
-        'user'    => [
-            'id'    => $user->id,
-            'name'  => $user->name,
-            'email' => $user->email,
-            'role'  => $user->role, // from users table
-            'roles' => $user->getRoleNames(), // from Spatie
-        ],
-    ], 201);
-
-} catch (\Exception $e) {
-    DB::rollBack();
-
-    return response()->json([
-        'status'  => false,
-        'message' => 'Something went wrong while creating user.',
-        'error'   => app()->isLocal() ? $e->getMessage() : null,
-    ], 500);
-}
-
-    }
-
-   public function deleteUser($id)
-{
-    $user = User::findOrFail($id);
-    $user->delete();
-
-    return response()->json([
-        'status'  => 'success',
-        'message' => 'User deleted successfully!',
-    ]);
-}
-
-public function editUser($id){
-    $roles = Role::all();
-    $users=User::findOrFail($id);
-    return view('admin.role_permission.admin.edit',compact('users','roles'));
-}
-public function updateUser(Request $request, $id)
-{
-    try {
-        $validated = $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users,email,' . $id,
-            'password' => 'nullable|string|min:6', // optional password
-            'roles' => 'required|exists:roles,id',
-        ]);
-
-        DB::beginTransaction();
-
-        $user = User::findOrFail($id);
-        
-        $role = Role::where('id', $validated['roles'])
-                    ->where('guard_name', 'web')
-                    ->first();
-
-        if (!$role) {
-            throw new \Exception("Invalid role selected.");
-        }
-
-        // Update user info
-        $user->name  = $validated['name'];
-        $user->email = $validated['email'];
-
-        if (!empty($validated['password'])) {
+            // Create user and dynamically set the 'role' column
+            $user = new User();
+            $user->name     = $validated['name'];
+            $user->email    = $validated['email'];
             $user->password = Hash::make($validated['password']);
+            $user->role     = $role->name; // 👈 dynamic role name from DB (e.g., 'superadmin', 'manager')
+            $user->save();
+
+            // Assign Spatie role
+            $user->assignRole($role->name);
+
+            DB::commit();
+
+            return response()->json([
+                'status'  => true,
+                'message' => 'User created successfully!',
+                'user'    => [
+                    'id'    => $user->id,
+                    'name'  => $user->name,
+                    'email' => $user->email,
+                    'role'  => $user->role, // from users table
+                    'roles' => $user->getRoleNames(), // from Spatie
+                ],
+            ], 201);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'status'  => false,
+                'message' => 'Something went wrong while creating user.',
+                'error'   => app()->isLocal() ? $e->getMessage() : null,
+            ], 500);
         }
-
-        $user->role = $role->name; 
-        $user->save();
-
-        $user->syncRoles([$role->name]);
-
-        DB::commit();
-
-        return response()->json([
-            'status'  => true,
-            'message' => 'User updated successfully!',
-            'user'    => [
-                'id'    => $user->id,
-                'name'  => $user->name,
-                'email' => $user->email,
-                'role'  => $user->role,
-                'roles' => $user->getRoleNames(),
-            ],
-        ], 200);
-
-    } catch (\Exception $e) {
-        DB::rollBack();
-
-        return response()->json([
-            'status'  => false,
-            'message' => 'Something went wrong while updating user.',
-            'error'   => app()->isLocal() ? $e->getMessage() : null,
-        ], 500);
     }
-}
 
+    public function deleteUser($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
 
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'User deleted successfully!',
+        ]);
+    }
+
+    public function editUser($id)
+    {
+        $roles = Role::all();
+        $users = User::findOrFail($id);
+        return view('admin.role_permission.admin.edit', compact('users', 'roles'));
+    }
+    public function updateUser(Request $request, $id)
+    {
+        try {
+            $validated = $request->validate([
+                'name'     => 'required|string|max:255',
+                'email'    => 'required|email|unique:users,email,' . $id,
+                'password' => 'nullable|string|min:6', // optional password
+                'roles' => 'required|exists:roles,id',
+            ]);
+
+            DB::beginTransaction();
+
+            $user = User::findOrFail($id);
+
+            $role = Role::where('id', $validated['roles'])
+                ->where('guard_name', 'web')
+                ->first();
+
+            if (!$role) {
+                throw new \Exception("Invalid role selected.");
+            }
+
+            // Update user info
+            $user->name  = $validated['name'];
+            $user->email = $validated['email'];
+
+            if (!empty($validated['password'])) {
+                $user->password = Hash::make($validated['password']);
+            }
+
+            $user->role = $role->name;
+            $user->save();
+
+            $user->syncRoles([$role->name]);
+
+            DB::commit();
+
+            return response()->json([
+                'status'  => true,
+                'message' => 'User updated successfully!',
+                'user'    => [
+                    'id'    => $user->id,
+                    'name'  => $user->name,
+                    'email' => $user->email,
+                    'role'  => $user->role,
+                    'roles' => $user->getRoleNames(),
+                ],
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'status'  => false,
+                'message' => 'Something went wrong while updating user.',
+                'error'   => app()->isLocal() ? $e->getMessage() : null,
+            ], 500);
+        }
+    }
 }

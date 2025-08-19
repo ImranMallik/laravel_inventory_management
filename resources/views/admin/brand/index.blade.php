@@ -9,12 +9,13 @@
                  <div class="flex-grow-1">
                      <h4 class="fs-18 fw-semibold m-0">All Brand</h4>
                  </div>
-
-                 <div class="text-end">
-                     <ol class="breadcrumb m-0 py-0">
-                         <a href="{{ route('admin.brand.create') }}" class="btn btn-secondary"> + Add Brand</a>
-                     </ol>
-                 </div>
+                 @if (Auth::guard('web')->user()->can('create.brand'))
+                     <div class="text-end">
+                         <ol class="breadcrumb m-0 py-0">
+                             <a href="{{ route('admin.brand.create') }}" class="btn btn-secondary"> + Add Brand</a>
+                         </ol>
+                     </div>
+                 @endif
              </div>
 
              <!-- Datatables  -->
@@ -44,13 +45,17 @@
                                              <td> <img src="{{ asset($item->image) }}" style="width: 70px; height:40px">
                                              </td>
                                              <td>
+                                                 @if (Auth::guard('web')->user()->can('edit.brand'))
+                                                     <a href="{{ route('admin.brand.edit', $item->id) }}"
+                                                         class="btn btn-success btn-sm">Edit</a>
+                                                 @endif
+                                                 @if (Auth::guard('web')->user()->can('delete.brand'))
+                                                     <a href="{{ route('admin.brand.delete', $item->id) }}"
+                                                         class="btn btn-danger btn-sm delete-item" id="delete">Delete</a>
+                                                 @endif
 
-                                                 <a href="{{ route('admin.brand.edit', $item->id) }}"
-                                                     class="btn btn-success btn-sm">Edit</a>
 
 
-                                                 <a href="{{ route('admin.brand.delete', $item->id) }}"
-                                                     class="btn btn-danger btn-sm delete-item" id="delete">Delete</a>
                                              </td>
                                          </tr>
                                      @endforeach
