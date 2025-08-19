@@ -27,7 +27,7 @@
                          </div>
 
                          <div class="card-body">
-                             <form action="#" method="post" class="row g-3" enctype="multipart/form-data">
+                             <form  id="submitUseradmin" method="post" class="row g-3" enctype="multipart/form-data">
                                  @csrf
 
                                  <div class="col-md-6">
@@ -58,7 +58,11 @@
 
 
                                  <div class="col-12">
-                                     <button class="btn btn-primary" type="submit">Save Change</button>
+                                    <button class="btn btn-primary" type="submit" id="saveButton">
+                                         <span id="spinner" class="spinner-border spinner-border-sm me-2 d-none"
+                                             role="status" aria-hidden="true"></span>
+                                         Save Change
+                                     </button>
                                  </div>
                              </form>
                          </div>
@@ -74,3 +78,72 @@
 
      </div>
  @endsection
+
+ @push('scripts')
+     <script>
+            $(document).ready(function() {
+                $('#submitUseradmin').on('submit', function(e) {
+                    e.preventDefault();
+
+                    // Basic validation
+                    let name = $("input[name='name']").val().trim();
+                    let email = $("input[name='email']").val().trim();
+                    let password = $("input[name='password']").val().trim();
+                    let roles = $("select[name='roles']").val();
+
+                    if (!name) {
+                        toastr.error("Name is required.");
+                        return false;
+                    }
+                    if (!email) {
+                        toastr.error("Email is required.");
+                        return false;
+                    }
+                    if (!password || password.length < 6) {
+                        toastr.error("Password must be at least 6 characters.");
+                        return false;
+                    }
+                    if (!roles) {
+                        toastr.error("Please select a role.");
+                        return false;
+                    }
+
+                    // Show loading spinner
+                    $('#spinner').removeClass('d-none');
+                    $('#saveButton').attr('disabled', true);
+
+                    // Send via AJAX
+                    let formData = new FormData(this);
+
+                    $.ajax({
+                        url: "{{ route('admin.store.user') }}", // 👈 define this route in web.php
+                        type: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function(response) {
+                            toastr.success(response.message);
+                            setTimeout(() => {
+                                window.location.href = "{{ route('admin.list.all.user') }}";
+                            }, 1500);
+                        },
+                        error: function(xhr) {
+                            let errors = xhr.responseJSON?.errors;
+                            if (errors) {
+                                $.each(errors, function(key, value) {
+                                    toastr.error(value[0]);
+                                });
+                            } else {
+                                toastr.error("An unexpected error occurred.");
+                            }
+                        },
+                        complete: function() {
+                            $('#spinner').addClass('d-none');
+                            $('#saveButton').removeAttr('disabled');
+                        }
+                    });
+                });
+            });
+    </script>
+
+ @endpush
