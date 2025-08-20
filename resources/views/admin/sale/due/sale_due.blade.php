@@ -6,10 +6,11 @@
         <div class="container-xxl">
 
             <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
+                @if (Auth::guard('web')->user()->can('All.due'))
                 <div class="flex-grow-1">
                     <h4 class="fs-18 fw-semibold m-0">All Sales Dues</h4>
                 </div>
-
+                @endif
                 <div class="text-end">
                     <ol class="breadcrumb m-0 py-0">
 

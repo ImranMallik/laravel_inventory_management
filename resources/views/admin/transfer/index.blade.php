@@ -9,12 +9,13 @@
                 <div class="flex-grow-1">
                     <h4 class="fs-18 fw-semibold m-0">All Transfer </h4>
                 </div>
-
+                @if (Auth::guard('web')->user()->can('transfer.add'))
                 <div class="text-end">
                     <ol class="breadcrumb m-0 py-0">
                         <a href="{{route('admin.transfer.create')}}" class="btn btn-secondary">+ Add Transfer</a>
                     </ol>
                 </div>
+                @endif
             </div>
 
             <!-- Datatables  -->
@@ -61,13 +62,15 @@
                                             <td>
                                                 <a title="Details" href="{{route('admin.transfer.details',$item->id)}}" class="btn btn-info btn-sm"> <span
                                                         class="mdi mdi-eye-circle mdi-18px"></span> </a>
-
+                                                        @if (Auth::guard('web')->user()->can('transfer.edit'))
                                                 <a title="Edit" href="{{route('admin.transfer.edit', $item->id)}}" class="btn btn-success btn-sm"> <span
                                                         class="mdi mdi-book-edit mdi-18px"></span> </a>
-
+                                                        @endif
+                                                        @if (Auth::guard('web')->user()->can('transfer.delete'))
                                                <a title="Delete" href="{{ route('admin.transfer.delete', $item->id) }}"
                                                     class="btn btn-danger btn-sm delete-item" id="delete"><span
                                                         class="mdi mdi-delete-circle  mdi-18px"></span></a>
+                                                        @endif
                                             </td>
                                         </tr>
                                     @endforeach
