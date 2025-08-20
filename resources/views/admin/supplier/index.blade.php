@@ -15,12 +15,13 @@
                  <div class="flex-grow-1">
                      <h4 class="fs-18 fw-semibold m-0">All Supplier</h4>
                  </div>
-
+                  @if (Auth::guard('web')->user()->can('supplier.add'))
                  <div class="text-end">
                      <ol class="breadcrumb m-0 py-0">
                          <a href="{{ route('admin.supplier.create') }}" class="btn btn-secondary"> + Add</a>
                      </ol>
                  </div>
+                 @endif
              </div>
 
              <!-- Datatables  -->
@@ -55,10 +56,14 @@
                                              <td>{{ $item->address }}</td>
                                              <td>
                                                  <div style="display: flex; gap: 5px;">
+                                                     @if (Auth::guard('web')->user()->can('supplier.edit'))
                                                      <a href="{{ route('admin.supplier.edit', $item->id) }}"
                                                          class="btn btn-success btn-sm">Edit</a>
+                                                         @endif
+                                                          @if (Auth::guard('web')->user()->can('supplier.delete'))
                                                      <a href="{{ route('admin.supplier.delete', $item->id) }}"
                                                          class="btn btn-danger btn-sm delete-item">Delete</a>
+                                                         @endif
                                                  </div>
                                              </td>
 

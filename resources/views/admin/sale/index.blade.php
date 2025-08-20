@@ -8,12 +8,13 @@
                 <div class="flex-grow-1">
                     <h4 class="fs-18 fw-semibold m-0">All Sale</h4>
                 </div>
-
+                @if (Auth::guard('web')->user()->can('Sale.add'))
                 <div class="text-end">
                     <ol class="breadcrumb m-0 py-0">
                         <a href="{{ route('admin.sale.items-create') }}" class="btn btn-secondary"> + Add Sale</a>
                     </ol>
                 </div>
+                @endif
             </div>
 
             <!-- Datatables  -->
@@ -64,14 +65,16 @@
                                                     class="btn btn-primary btn-sm"> <span
                                                         class="mdi mdi-download-circle mdi-18px"></span> </a>
 
-
+                                                        @if (Auth::guard('web')->user()->can('Sale.edit'))
                                                 <a title="Edit" href="{{ route('admin.sales-edit', $item->id) }}"
                                                     class="btn btn-success btn-sm"> <span
                                                         class="mdi mdi-book-edit mdi-18px"></span> </a>
-
+                                                        @endif
+                                                        @if (Auth::guard('web')->user()->can('Sale.delete'))
                                                 <a title="Delete" href="{{ route('admin.sale-delete', $item->id) }}"
                                                     class="btn btn-danger btn-sm delete-item" id="delete"><span
                                                         class="mdi mdi-delete-circle  mdi-18px"></span></a>
+                                                        @endif
                                             </td>
                                         </tr>
                                     @endforeach

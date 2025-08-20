@@ -9,12 +9,13 @@
                  <div class="flex-grow-1">
                      <h4 class="fs-18 fw-semibold m-0">All Ware House</h4>
                  </div>
-
+@if (Auth::guard('web')->user()->can('warehouse.add'))
                  <div class="text-end">
                      <ol class="breadcrumb m-0 py-0">
                          <a href="{{ route('admin.ware-house.create') }}" class="btn btn-secondary"> + Add</a>
                      </ol>
                  </div>
+                 @endif
              </div>
 
              <!-- Datatables  -->
@@ -48,13 +49,14 @@
                                              <td>{{ $item->phone }}</td>
                                              <td>{{ $item->city }}</td>
                                              <td>
-
+                                                @if (Auth::guard('web')->user()->can('warehouse.edit'))
                                                  <a href="{{ route('admin.ware-house.edit', $item->id) }}"
                                                      class="btn btn-success btn-sm">Edit</a>
-
-
+                                                     @endif
+                                                     @if (Auth::guard('web')->user()->can('warehouse.delete'))
                                                  <a href="{{ route('admin.ware-house.delete', $item->id) }}"
                                                      class="btn btn-danger btn-sm delete-item" id="delete">Delete</a>
+                                                     @endif
                                              </td>
                                          </tr>
                                      @endforeach

@@ -10,11 +10,13 @@
                     <h4 class="fs-18 fw-semibold m-0">All Product</h4>
                 </div>
 
+                @if (Auth::guard('web')->user()->can('product.add'))
                 <div class="text-end">
                     <ol class="breadcrumb m-0 py-0">
                         <a href="{{ route('admin.all-products.create') }}" class="btn btn-secondary">+ Add Product</a>
                     </ol>
                 </div>
+                @endif
             </div>
 
             <!-- Datatables  -->
@@ -63,17 +65,21 @@
                                                 @endif
                                             </td>
                                             <td>
+                                                 
                                                 <a title="Details"
                                                     href="{{ route('admin.get.products.details', $item->id) }}"
                                                     class="btn btn-info btn-sm"> <span
                                                         class="mdi mdi-eye-circle mdi-18px"></span> </a>
-
+                                                         @if (Auth::guard('web')->user()->can('product.edit'))
                                                 <a href="{{ route('admin.all-products.edit', $item->id) }}"
                                                     class="btn btn-success btn-sm"><span
                                                         class="mdi mdi-book-edit mdi-18px"></span></a>
+                                                        @endif
+                                                         @if (Auth::guard('web')->user()->can('product.delete'))
                                                 <a href="{{ route('admin.all-products.delete', $item->id) }}"
                                                     class="btn btn-danger btn-sm delete-item" id="delete"><span
                                                         class="mdi mdi-delete-circle  mdi-18px"></span></a>
+                                                        @endif
                                             </td>
                                         </tr>
                                     @endforeach
